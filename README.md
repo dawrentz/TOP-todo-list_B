@@ -6,4 +6,7 @@ Being that I was interrupted in this project for a few months and seeing some la
 
 
 personal notes:
+    -create all in console first (ensure no DOM dependancy)
+    -SOLID (focus on single responsibility)
 
+    make constructor for title, description, dueDate and priority
