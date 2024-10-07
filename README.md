@@ -6,9 +6,4 @@ Being that I was interrupted in this project for a few months and seeing some la
 
 
 personal notes:
-    install webpack stuff
-    link up all
-    make json scripts
-    reset css
-    commit when init'd
 

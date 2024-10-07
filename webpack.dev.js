@@ -7,5 +7,9 @@ module.exports = merge(common, {
     devServer: {
         static: "./dist",
         watchFiles: ["./src/template.html"],
+        client: {
+            logging: "none", //disable HMR logs
+            // overlay: false,  //disable error overlay
+        },
     },
 });
