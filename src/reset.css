@@ -1,4 +1,4 @@
-/* ==================Reset================== */
+/* ==================reset.css================== */
 
 
 /* 1. Use a more-intuitive box-sizing model. */
@@ -18,6 +18,11 @@
 body {
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
+
+    /* immediate children of body */
+    > * {
+        padding: var(--padding);
+    }
 }
 
 /* 5. Improve media defaults */
@@ -47,4 +52,9 @@ a {
     appearance: none;
     color: inherit;
     text-decoration: none;
+}
+
+/* 10. lists */
+ul {
+    padding-left: var(--padding);
 }

@@ -1,6 +1,8 @@
+//filterModuel.js
+
 import * as taskModule from "./taskModule.js";
 
-//init to "all" so user sees all tasks on start. Don't store filter in localStorage
+//init to "all" so user sees all tasks on start. Don't store filter in localStorage, want to reset to "all" on reboot
 let _currentFilter = "all";
 
 export function setFilter(filter) {

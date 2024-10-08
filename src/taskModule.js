@@ -2,16 +2,6 @@
 
 const _taskList = [];
 
-export function getTaskList() {
-    // Return a shallow copy of the array, but deep copy the objects within. This is to protect the task data.
-    return _taskList.map(task => ({ ...task }));
-} 
-
-//push new task. Needs to be in Task class and run automatically?
-export function addTasktoTaskList(task) {
-    _taskList.push(task);
-}
-
 let idNum = 0;
 
 //task creation
@@ -36,6 +26,22 @@ export class Task{
     }
 }
 
+//update localStorage
+function updateLocalStorage(data) {
+    //logic
+}
+
+export function getTaskList() {
+    // Return a shallow copy of the array, but deep copy the objects within. This is to protect the task data.
+    return _taskList.map(task => ({ ...task }));
+} 
+
+//push new task. Needs to be in Task class and run automatically?
+export function addTasktoTaskList(task) {
+    _taskList.push(task);
+}
+
+//delete a task
 export function delTask(idNum) {
     _taskList.forEach((task, index) => {
         if (task.idNum === idNum) {
@@ -44,6 +50,7 @@ export function delTask(idNum) {
     });
 } 
 
+//find all tasks IDs in a project
 export function findTaskIDsInProject(projectName) {
     const tasksIDsInProject = [];
     _taskList.forEach((task) => {

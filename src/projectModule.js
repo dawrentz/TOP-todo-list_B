@@ -5,6 +5,11 @@ import * as taskModule from "./taskModule.js";
 //running list of projects. Ensure "all" is included
 const _projectList = ["all"];
 
+//update localStorage
+function updateLocalStorage(data) {
+    //logic
+}
+
 export function getProjectList() {
     // Return a copy of the array. This is to protect the project data.
     return _projectList.map((project) => project);
@@ -25,13 +30,14 @@ export function delProjectFromProjectList(projectName) {
 }
 
 //remove project from list and all corresponding tasks
-export function delProjectAndTasks(projectName) {
+export function wipeEntireProject(projectName) {
     //reuse delProject function
     delProjectFromProjectList(projectName);
 
+    //extract IDs for delTask()
     const tasksToDelbyID = taskModule.findTaskIDsInProject(projectName);
-
-    //reuse delTask function
+        
+    //loop through IDs and delete each
     tasksToDelbyID.forEach((idNum) => {
         taskModule.delTask(idNum);
     });

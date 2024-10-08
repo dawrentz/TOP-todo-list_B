@@ -6,6 +6,11 @@ import * as projectModule from "./projectModule.js";
 import * as renderModule from "./renderModule.js";
 import * as filterModule from "./filterModule.js";
 
+//declarations
+const mainContentArea = document.querySelector("#main-content");
+
+
+//testing
 projectModule.addProjectToProjectList("project 1");
 projectModule.addProjectToProjectList("project 2");
 projectModule.addProjectToProjectList("project 3");
@@ -23,17 +28,32 @@ taskModule.addTasktoTaskList(task2);
 const task3 = new taskModule.Task("task3", "project 2", "descripton3", "dueDateYesterday", "med priority");
 taskModule.addTasktoTaskList(task3);
 
-filterModule.setFilter("project 2");
+//filter set
+// filterModule.setFilter("all");
 
 
 
-console.log(3);
-renderModule.render(filterModule.getFilteredTaskList());
+// console.log(3);
+// renderModule.render(filterModule.getFilteredTaskList());
 // taskModule.delTask(0);
 // console.log(4);
 // renderModule.render(filterModule.getFilteredTaskList());
-// projectModule.delProjectAndTasks("project 2");
+// projectModule.wipeEntireProject("project 2");
 // console.log(5);
 // renderModule.render(projectModule.getProjectList());
 // console.log(6);
 // renderModule.render(filterModule.getFilteredTaskList());
+
+//test
+function cardTest() {
+
+    const testCard = renderModule.createNewCard();
+    testCard.textContent = "test card ";
+    renderModule.renderToDOM(testCard, mainContentArea);
+}
+
+cardTest();
+cardTest();
+cardTest();
+
+

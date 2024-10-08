@@ -1,6 +1,41 @@
+/* style.css */
+
 @import url("./reset.css");
 
+/* variables */
+:root {
+    --color-main: forestgreen;
+    --color-sec: white;
+    --spacing: 1rem;
+    --padding: 1rem;
+    --font-family-main: Arial, Helvetica, sans-serif;
+    
+    /* testing */
+    * {
+        outline: solid red 1px;
+
+    }
+}
 
 body {
-    background-color: aquamarine;
+    background-color: var(--color-main);
+    color: white;
+    font-size: 1rem;
+    font-family: var(--font-family-main);
+
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto 1fr;
+
+    /* set height so side bar can always fill up page vertically */
+    min-height: 100vh;
 }
+
+#header {
+    grid-column: span 2;
+}
+
+#sidebar {
+
+}
+
