@@ -23,7 +23,43 @@
         </div>
     </div>
     <div id="main-content">
-        <!-- card templates? -->
+        <!-- populated by js -->
     </div>
+
+    <!-- default todo card template innerHTML -->
+    <template id="default-todo-card-template">
+        add task
+        <div class="todo-input-line">
+            <input
+            type="text"
+            name="todo-title-input"
+            id="todo-title-input"
+            placeholder="title">
+        </div>
+        <div class="todo-input-line">
+            <select id="todo-project-input">
+                <option value="">select project</option>
+            </select>
+        </div>
+        <div class="todo-input-line">
+            <textarea id="todo-description-input"
+            placeholder="description..."
+            rows="4"
+            cols="50"></textarea>
+        </div>
+        <div class="todo-input-line">
+            <input
+            type="date"
+            name="todo-dueDate-input"
+            id="todo-dueDate-input"
+            >
+            <!-- use js to make placeholder "today" -->
+            <!-- placeholder="title"> -->
+        </div>
+        <div class="todo-input-line">
+            <button type="button" id="todo-priority-input">high</button>
+        </div>
+        <button type="button" id="submit-new-todo-button">submit</button>
+    </template>
 </body> 
 </html>

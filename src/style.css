@@ -39,3 +39,18 @@ body {
 
 }
 
+#main-content {
+    display: grid;
+    gap: var(--padding);
+    align-content: start;
+
+    .todo-card {
+        background-color: var(--color-sec);
+        color: var(--color-main);
+
+        padding: var(--padding);
+
+        max-height: max-content;
+    }
+}
+

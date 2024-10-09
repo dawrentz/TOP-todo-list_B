@@ -9,4 +9,5 @@ personal notes:
     -create all in console first (ensure no DOM dependancy)
     -SOLID (focus on single responsibility)
 
-    make constructor for title, description, dueDate and priority
+10/9
+    -create default todo card template and render in js
