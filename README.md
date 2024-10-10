@@ -9,5 +9,12 @@ personal notes:
     -create all in console first (ensure no DOM dependancy)
     -SOLID (focus on single responsibility)
 
-10/9
-    -create default todo card template and render in js
+todo:
+    -create task from user inputs via defauly todo card
+    -filter page via project select
+    -add project button
+    -populate project drop down list in default todo card
+    
+
+now:
+    -create todo cards from tasks list

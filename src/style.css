@@ -24,7 +24,7 @@ body {
     font-family: var(--font-family-main);
 
     display: grid;
-    grid-template-columns: auto 1fr;
+    grid-template-columns: 1fr 4fr;
     grid-template-rows: auto 1fr;
 
     /* set height so side bar can always fill up page vertically */

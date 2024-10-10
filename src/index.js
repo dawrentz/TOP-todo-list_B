@@ -22,6 +22,4 @@ taskModule.addTasktoTaskList(task2);
 const task3 = new taskModule.Task("task3", "project 2", "descripton3", "dueDateYesterday", "med priority");
 taskModule.addTasktoTaskList(task3);
 
-renderModule.renderProjectList()
 renderModule.renderAll();
-
