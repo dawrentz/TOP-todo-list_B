@@ -13,8 +13,9 @@ todo:
     -create task from user inputs via defauly todo card
     -filter page via project select
     -add project button
-    -populate project drop down list in default todo card
+    -add localStorage
     
 
 now:
-    -create todo cards from tasks list
+    -populate project drop down list in default todo card
+    -import user inputs to make new task (make eventListnerModule.js)

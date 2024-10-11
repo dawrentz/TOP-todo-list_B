@@ -7,22 +7,33 @@ import * as taskModule from "./taskModule.js";
 const projectsListElm = document.querySelector("#projects-list");
 const mainContentContainer = document.querySelector("#main-content");
 
-export function renderProjectList() {
-    //get sorted projects list
-    const organizedProjectsList = projectModule.organizeProjectsList(projectModule.getProjectList());
-    //make li's
-    const projectLIs = makeProjectElms("li", "project-li", organizedProjectsList);
-    //append li's
-    projectLIs.forEach((li) => {
-        appendElmToLocation(li, projectsListElm);
+export function renderAll() {
+    //wipe all first?
+    renderProjectSidebarList();
+    renderDefaultTodoCard();
+    renderTodoCards();
+}
+
+function renderProjectSidebarList() {
+    renderProjectListToLocation("li", "project-li", projectsListElm);
+}
+
+function renderProjectListToLocation(elm, classNameArg, location) { 
+    const projectElms = createProjectListElements(elm, classNameArg);
+    
+    //append elms
+    projectElms.forEach((elm) => {
+        appendElmToLocation(elm, location);
     });
 }
 
-export function renderAll() {
-    //wipe all first?
-    renderProjectList();
-    renderDefaultTodoCard();
-    renderTodoCards();
+//make elms for sorted projects list
+function createProjectListElements(elm, classNameArg) {
+    //get sorted projects list
+    const organizedProjectsList = projectModule.organizeProjectsList(projectModule.getProjectList());
+    //make li's
+    const projectElms = makeElmsFromList(elm, classNameArg, organizedProjectsList);
+    return projectElms;
 }
 
 //generic elements creation with classname
@@ -50,9 +61,19 @@ function createDefaultTodoCard() {
     const defaultTodoCard = createCard("div", "todo-card", "default-todo-card");
     const templateClone = cloneTemplate("#default-todo-card-template");
     appendElmToLocation(templateClone, defaultTodoCard);
+
+    //make populateDefaultTodoCard???
+
+    const projectSelectLine = defaultTodoCard.querySelector("#todo-project-input");
+    addProjectListToDefaultCard(projectSelectLine);
     
     return defaultTodoCard;
 }
+
+//add dropdown list of projects to default card project selection
+function addProjectListToDefaultCard(projectLine) { // or better to pass the card? Or reference with ID?
+    
+}  
 
 //create and append default todo card
 function renderDefaultTodoCard() {
@@ -87,10 +108,10 @@ function renderTodoCards() {
 
 function populateTodoCard(task, card) {
     //collect elms to populate
-    const todoTitleElm = card.querySelector("#todo-title");
-    const todoProjectElm = card.querySelector("#todo-project");
-    const todoDescriptElm = card.querySelector("#todo-description");
-    const todoDueDateElm = card.querySelector("#todo-dueDate");
+    const todoTitleElm = card.querySelector(".todo-title");
+    const todoProjectElm = card.querySelector(".todo-project");
+    const todoDescriptElm = card.querySelector(".todo-description");
+    const todoDueDateElm = card.querySelector(".todo-dueDate");
     //priority is the card color
 
     //link elms to task prop to populate
@@ -117,15 +138,15 @@ function cloneTemplate(templateIDselector) {
 }
 
 //generically create elms for all projects 
-function makeProjectElms(element, classNameArg, organizedProjectsListArg) {
+function makeElmsFromList(element, classNameArg, list) {
     //store the project li's in an array
-    const projectElms = [];
+    const listElms = [];
     //loop through projects, create LI, push to array
-    organizedProjectsListArg.forEach((project) => {
+    list.forEach((item) => {
         const tempElm = createElm(element, classNameArg);
-        tempElm.textContent = project;
-        projectElms.push(tempElm);
+        tempElm.textContent = item;
+        listElms.push(tempElm);
     });
 
-    return  projectElms;
+    return  listElms;
 }
