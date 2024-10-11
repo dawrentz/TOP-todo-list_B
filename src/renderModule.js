@@ -7,6 +7,9 @@ import * as taskModule from "./taskModule.js";
 const projectsListElm = document.querySelector("#projects-list");
 const mainContentContainer = document.querySelector("#main-content");
 
+//============================================ Major Functions ============================================
+
+//render all dynamic js elms to page
 export function renderAll() {
     //wipe all first?
     renderProjectSidebarList();
@@ -14,7 +17,9 @@ export function renderAll() {
     renderTodoCards();
 }
 
-function renderProjectSidebarList() {
+//============================================ Project Functions ============================================
+
+function renderProjectSidebarList() {     
     renderProjectListToLocation("li", "project-li", projectsListElm);
 }
 
@@ -36,26 +41,13 @@ function createProjectListElements(elm, classNameArg) {
     return projectElms;
 }
 
-//generic elements creation with classname
-function createElm(elm, classNameArg, optionalIDArg) {
-    const newElm = document.createElement(elm);
-    newElm.className = classNameArg;
-    //optional id
-    //test
-    if (optionalIDArg !== undefined) {
-        newElm.id = optionalIDArg;    
-    }
-    
-    return newElm;
+//============================================ DEFAULT Todo Card Functions ============================================
+
+function renderDefaultTodoCard() {
+    const defaultTodoCard = createDefaultTodoCard();
+    appendElmToLocation(defaultTodoCard, mainContentContainer);
 }
 
-//generic place element on DOM
-//can use location[typeAppend]???
-function appendElmToLocation(element, location) {
-    location.append(element);
-}
-
-//create default card with html template
 function createDefaultTodoCard() {
     //create card and append template
     const defaultTodoCard = createCard("div", "todo-card", "default-todo-card");
@@ -72,16 +64,21 @@ function createDefaultTodoCard() {
 
 //add dropdown list of projects to default card project selection
 function addProjectListToDefaultCard(projectLine) { // or better to pass the card? Or reference with ID?
-    
+    // renderProjectListToLocation("select","" , location); 
 }  
 
-//create and append default todo card
-function renderDefaultTodoCard() {
-    const defaultTodoCard = createDefaultTodoCard();
-    appendElmToLocation(defaultTodoCard, mainContentContainer);
+//============================================ Todo Card Functions ============================================
+
+function renderTodoCards() {
+    //may need to pass a taskListArg when introduce filtering task by project (or other)
+    //make getFilteredTaskList() in taskModule?
+    const taskList = taskModule.getTaskList();
+    taskList.forEach((task) => {
+        const newTodoCard = createToDoCard(task);
+        appendElmToLocation(newTodoCard, mainContentContainer);
+    });
 }
 
-//create todo task card
 function createToDoCard(task) {
     //create card and append template
     const todoCard = createCard("div", "todo-card", task.idNum); //task.id will need string
@@ -92,19 +89,8 @@ function createToDoCard(task) {
     populateTodoCard(task, todoCard);
 
     return todoCard;
-
 }
 
-//create append all todo cards from list
-function renderTodoCards() {
-    //may need to pass a taskListArg when introduce filtering task by project (or other)
-    //make getFilteredTaskList() in taskModule?
-    const taskList = taskModule.getTaskList();
-    taskList.forEach((task) => {
-        const newTodoCard = createToDoCard(task);
-        appendElmToLocation(newTodoCard, mainContentContainer);
-    });
-}
 
 function populateTodoCard(task, card) {
     //collect elms to populate
@@ -122,6 +108,23 @@ function populateTodoCard(task, card) {
     //set priority class?
 
 
+}
+
+//============================================ Generic Functions ============================================
+
+function createElm(elm, classNameArg, optionalIDArg) {
+    const newElm = document.createElement(elm);
+    newElm.className = classNameArg;
+    //optional class
+    if (classNameArg !== undefined) {
+        newElm.className = classNameArg;    
+    }
+    //optional id
+    if (optionalIDArg !== undefined) {
+        newElm.id = optionalIDArg;    
+    }
+    
+    return newElm;
 }
 
 function createCard(element, classNameArg, IDArg) {
@@ -149,4 +152,10 @@ function makeElmsFromList(element, classNameArg, list) {
     });
 
     return  listElms;
+}
+
+//generic place element on DOM
+//can use location[typeAppend]?
+function appendElmToLocation(element, location) {
+    location.append(element);
 }
