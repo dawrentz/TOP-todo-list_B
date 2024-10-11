@@ -28,6 +28,10 @@ export function organizeProjectsList(projectsListArg) {
     return sortedProjectsList;
 }
 
+export function getOrganizeProjectsList() {
+    return organizeProjectsList(getProjectList());
+}
+
 //add project to list
 export function addProjectToProjectList(project) {
     _projectList.push(project);

@@ -9,7 +9,6 @@ const mainContentContainer = document.querySelector("#main-content");
 
 //============================================ Major Functions ============================================
 
-//render all dynamic js elms to page
 export function renderAll() {
     //wipe all first?
     renderProjectSidebarList();
@@ -19,25 +18,40 @@ export function renderAll() {
 
 //============================================ Project Functions ============================================
 
-function renderProjectSidebarList() {     
-    renderProjectListToLocation("li", "project-li", projectsListElm);
+function renderProjectSidebarList() {    
+    const projectSidebarElms = createProjectElms("li");
+    renderProjectListToLocation(projectSidebarElms, projectsListElm);
 }
 
-function renderProjectListToLocation(elm, classNameArg, location) { 
-    const projectElms = createProjectListElements(elm, classNameArg);
-    
-    //append elms
-    projectElms.forEach((elm) => {
+function renderProjectListToLocation(elmList, location) { 
+    elmList.forEach((elm) => {
         appendElmToLocation(elm, location);
     });
 }
 
-//make elms for sorted projects list
-function createProjectListElements(elm, classNameArg) {
+//not sure if this follows the SOLID, but the code seem cleaner and this can update fairly easily
+function createProjectElms(elmType) {
     //get sorted projects list
-    const organizedProjectsList = projectModule.organizeProjectsList(projectModule.getProjectList());
-    //make li's
-    const projectElms = makeElmsFromList(elm, classNameArg, organizedProjectsList);
+    const orgProjList = projectModule.getOrganizeProjectsList();
+    //make elms
+    const projectElms = [];
+    orgProjList.forEach((project) => {
+        const tempElm = createElm(elmType);
+
+
+        // types of project elms to be made
+        if (elmType === "option") {
+            addValueToElm(tempElm, project);
+        }
+        else if (elmType === "li") {
+            addClassToElm(tempElm, "sidebar-project-li");
+        }
+        else { throw new Error("ERROR: elmType must be one of the following:\n- option \n- li "); }
+
+        tempElm.textContent = project;
+        projectElms.push(tempElm);
+    });
+    
     return projectElms;
 }
 
@@ -54,18 +68,21 @@ function createDefaultTodoCard() {
     const templateClone = cloneTemplate("#default-todo-card-template");
     appendElmToLocation(templateClone, defaultTodoCard);
 
-    //make populateDefaultTodoCard???
-
-    const projectSelectLine = defaultTodoCard.querySelector("#todo-project-input");
-    addProjectListToDefaultCard(projectSelectLine);
+    populateDefaultTodoCard(defaultTodoCard);
     
     return defaultTodoCard;
 }
 
-//add dropdown list of projects to default card project selection
-function addProjectListToDefaultCard(projectLine) { // or better to pass the card? Or reference with ID?
-    // renderProjectListToLocation("select","" , location); 
-}  
+function populateDefaultTodoCard(card) { //passing card because it's created in js, not from HTML
+    const projectSelectLine = card.querySelector("#todo-project-input");
+    addProjDropDownToDefaultCard(projectSelectLine);
+    //add date handling
+}
+
+function addProjDropDownToDefaultCard(projectSelectLineArg) {
+    const dropDownProjElms = createProjectElms("option"); 
+    renderProjectListToLocation(dropDownProjElms, projectSelectLineArg); 
+}
 
 //============================================ Todo Card Functions ============================================
 
@@ -91,7 +108,6 @@ function createToDoCard(task) {
     return todoCard;
 }
 
-
 function populateTodoCard(task, card) {
     //collect elms to populate
     const todoTitleElm = card.querySelector(".todo-title");
@@ -112,23 +128,32 @@ function populateTodoCard(task, card) {
 
 //============================================ Generic Functions ============================================
 
-function createElm(elm, classNameArg, optionalIDArg) {
+function createElm(elm) {
     const newElm = document.createElement(elm);
-    newElm.className = classNameArg;
-    //optional class
-    if (classNameArg !== undefined) {
-        newElm.className = classNameArg;    
-    }
-    //optional id
-    if (optionalIDArg !== undefined) {
-        newElm.id = optionalIDArg;    
-    }
-    
     return newElm;
 }
 
+function addClassToElm(elm, classNameArg) {
+    elm.classList.add(classNameArg);
+}
+
+function addIDtoElm(elm, idArg) {
+    elm.id = idArg;
+}
+
+function addDataAttToElm(elm, dataName, dataValue) {
+    elm.setAttribute(dataName, dataValue);
+}
+
+function addValueToElm(elm, value) {
+    elm.value = value;
+}
+
+//could you do all this with Classes? like, const newCard = new Card. then call newCard.addClass(className)
 function createCard(element, classNameArg, IDArg) {
     const newCard = createElm(element, classNameArg, IDArg);
+    addClassToElm(newCard, classNameArg);
+    addIDtoElm(newCard, IDArg);
     return newCard;
 }
 
@@ -140,13 +165,16 @@ function cloneTemplate(templateIDselector) {
     return clone;
 }
 
-//generically create elms for all projects 
+//generically create elms from list
+//dont like this, want to choose to add class and ID and as needed when called (can make function for making specifc list that connects everything like this)
 function makeElmsFromList(element, classNameArg, list) {
     //store the project li's in an array
     const listElms = [];
     //loop through projects, create LI, push to array
     list.forEach((item) => {
-        const tempElm = createElm(element, classNameArg);
+        const tempElm = createElm(element);
+        //addClass to list elsewhere? make function or loop through list all the call?
+        addClassToElm(tempElm, classNameArg);
         tempElm.textContent = item;
         listElms.push(tempElm);
     });
