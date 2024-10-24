@@ -65,12 +65,49 @@ function createSidebarProjListLine(projectName) {
     const lineWrapper = createElm("div");
     addClassToElm(lineWrapper, "sidebar-proj-list-line");
 
+    //add name elm
     const projNameElm = createSidebarProjListName(projectName);
     appendElmToLocation(projNameElm, lineWrapper, "append");
 
     //add del/edit btns
+    if (projectName !== "all") { //"all" doesn't get edit/del btns
+        //edit Btn
+        const editBtn = createEditBtn( //create edit btn 
+            () => swapOutElm( //swaps out project line for edit project line on edit btn select
+                lineWrapper,
+                () => createNewProjInput("value", projectName), //creates new inputline for use
+                () => sidebarEditProjConfirmFunc(), //edit project logic
+                true //is an edit line
+            ) 
+        ); 
+        appendElmToLocation(editBtn, lineWrapper, "append");
+
+        //del btn
+        // const delBtn = createSidebar //delBtn here?
+    }
 
     return lineWrapper;
+}
+
+function sidebarEditProjConfirmFunc() {
+    console.warn("sidebarEditProjConfirmFunc needs logic")
+}
+
+function createSidebarProjListName(projectName) {
+    const projNameElm = createElm("div");
+    addClassToElm(projNameElm, "sidebar-proj-list-name");
+    projNameElm.textContent = projectName;
+    projNameElm.style = "display: inline"; //to make stay on same line. Move to css?
+    //add event listener
+    eventListenerModule.addELtoSidebarProjName(projNameElm);
+    return projNameElm;
+}
+
+function createNewProjInput(attToAdd, attValue) {
+    const projectInputElm = createElm("input");
+    addAttToElm(projectInputElm, attToAdd, attValue);
+    
+    return projectInputElm;
 }
 
 function createDropDownProjElms() {
@@ -92,15 +129,6 @@ function createDropDownProjElms() {
     projectElms.shift(); 
     
     return projectElms;    
-}
-
-function createSidebarProjListName(projectName) {
-    const projNameElm = createElm("div");
-    addClassToElm(projNameElm, "sidebar-proj-list-name");
-    projNameElm.textContent = projectName;
-    //add event listener
-    eventListenerModule.addELtoSidebarProjName(projNameElm);
-    return projNameElm;
 }
 
 //============================================ DEFAULT Todo Card Functions ============================================//
@@ -264,16 +292,10 @@ export function addProjBtnChangeOnSelect(btn) {
 
     const addProjSidebarLine = swapOutElm( //hides wrapper and "swaps it out" with this new line
         btnAreaWrapper, //element to hide/unhide
-        () => createNewProjInput(), //creates/appends input for user
-        () => confirmAddProjFunc(btnAreaWrapper, addProjSidebarLine) //confirm add project logic
+        () => createNewProjInput("placeholder", "new project"), //creates/appends input for user
+        () => confirmAddProjFunc(btnAreaWrapper, addProjSidebarLine), //confirm add project logic
+        true
     );
-}
-
-function createNewProjInput() {
-    const projectInputElm = createElm("input");
-    addAttToElm(projectInputElm, "placeholder", "new project");
-    
-    return projectInputElm;
 }
 
 //add new project function
@@ -299,7 +321,7 @@ function confirmAddProjFunc(wrapper, newInputLine) {
 
 //============================================ Derived Functions ============================================//
 
-function swapOutElm(elmToHide, firstElmFunc, confirmFunc) {
+function swapOutElm(elmToHide, firstElmFunc, confirmFunc, isForEditLine) {
     hideElm(elmToHide);
 
     const newLineWrapper = createConfirmCancelLine(
@@ -310,8 +332,19 @@ function swapOutElm(elmToHide, firstElmFunc, confirmFunc) {
 
     appendElmToLocation(newLineWrapper, elmToHide, "after"); //need make "after" a parameter in swapOutElm()?
     newLineWrapper.style = "display: inline"; //to make stay on same line. Move to css?
+
+    //special case for edit lines. Needs extra class and to focus/select on input
+    if (isForEditLine) {
+        swapOutIsForEditLine (newLineWrapper);
+    }
     
     return newLineWrapper;    
+}
+
+function swapOutIsForEditLine (newWrapper) {
+    addClassToElm(newWrapper, "edit-line");
+    const newWrapperInput = newWrapper.querySelector("input");
+    newWrapperInput.select();
 }
 
 function createConfirmCancelLine(hiddenElm, firstElmFunc, confirmFunc) {
@@ -337,6 +370,11 @@ function delConfirmMessageElm(message) {
     delTaskConfirmMessage.textContent = message;
     delTaskConfirmMessage.style = "font-style: italic"; //needs css instead
     return delTaskConfirmMessage;
+}
+
+function createEditBtn(selectBtnFunc) {
+    const newEditBtn = createBtn("✎", "edit-btn", selectBtnFunc);
+    return newEditBtn;
 }
 
 function createCancelBtn(hiddenElm, newElmToDel) {

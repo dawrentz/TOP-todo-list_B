@@ -10,12 +10,16 @@ personal notes:
     -SOLID (focus on single responsibility)
 
 todo:
-    -create task from user inputs via defauly todo card
-    -filter page via project select
-    -add project button
-    -add localStorage
+    -add localStorage module
+    -edit todo lines
+    -priority class color
+    -css
+    -date formatting
+    -date default
+
     
 
 now:
-    -populate project drop down list in default todo card
-    -import user inputs to make new task (make eventListnerModule.js)
+    -add/del btns to sidebar project list
+        edit btn needs logic
+        delBtn logic needs abstraction from todo-task delete button
