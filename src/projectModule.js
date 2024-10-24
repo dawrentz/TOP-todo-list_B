@@ -7,6 +7,7 @@ import * as helperModule from "./helper.js";
 const _projectList = ["all"];
 
 //update localStorage
+//make own module
 function updateLocalStorage(data) {
     //logic
 }
@@ -33,11 +34,13 @@ export function getOrganizeProjectsList() {
 }
 
 //add project to list
+//add local storage
 export function addProjectToProjectList(project) {
     _projectList.push(project);
 }
 
 //remove project form list
+//add local storage
 export function delProjectFromProjectList(projectName) {
     _projectList.forEach((project, index) => {
         if (project === projectName) {
@@ -47,6 +50,7 @@ export function delProjectFromProjectList(projectName) {
 }
 
 //remove project from list and all corresponding tasks
+//add local storage
 export function wipeEntireProject(projectName) {
     //reuse delProject function
     delProjectFromProjectList(projectName);

@@ -24,10 +24,11 @@ body {
     font-family: var(--font-family-main);
 
     display: grid;
-    grid-template-columns: 1fr 4fr;
+    /* set max width on first column? changes with project input */
+    grid-template-columns: 1fr 4fr; 
     grid-template-rows: auto 1fr;
 
-    /* set height so side bar can always fill up page vertically */
+    /* set min-height so side bar can always fill up page vertically */
     min-height: 100vh;
 }
 
@@ -36,6 +37,10 @@ body {
 }
 
 #sidebar {
+    
+    .sidebar-project-li {
+        width: fit-content;
+    }
 
 }
 
@@ -51,6 +56,25 @@ body {
         padding: var(--padding);
 
         max-height: max-content;
+    }
+
+    /* todo-card non-detailed display */
+    .todo-card-abridged {
+        .todo-data-line-project {
+            display: none;
+        }
+        
+        .todo-data-line-description {
+            display: none;
+        }
+    }
+    
+    /* def-todo-card non-detailed display */
+    .def-todo-card-abridged {
+        #default-card-form-wrapper {
+            display: none;
+        }
+
     }
 }
 

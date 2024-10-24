@@ -4,11 +4,13 @@ import "./style.css";
 import * as taskModule from "./taskModule.js";
 import * as projectModule from "./projectModule.js";
 import * as renderModule from "./renderModule.js";
-import * as filterModule from "./filterModule.js";
+import * as eventListenerModule from "./eventListenerModuel.js";
 
 //declarations
-const mainContentArea = document.querySelector("#main-content");
+const addProjectBtn = document.querySelector("#add-project-btn");
 
+//init
+eventListenerModule.addELtoSidebarAddProjBtn(addProjectBtn);
 
 //testing
 projectModule.addProjectToProjectList("project 3");

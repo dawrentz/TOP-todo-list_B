@@ -1,8 +1,15 @@
 //taskModule.js
 
+import * as helperModule from "./helper.js";
+
 const _taskList = [];
 
-let idNum = 0;
+let _idNum = 0;
+
+function getNewIDnum() {
+    const newID = _idNum++;
+    return newID.toString(); //need convert id to string for edit task funcs
+}
 
 //task creation
 export class Task{
@@ -12,7 +19,7 @@ export class Task{
         this.description = description;
         this.dueDate = dueDate;
         this.priority = priority;
-        this.idNum = idNum++;
+        this.idNum = getNewIDnum();
     }
 
     getProp(prop) {
@@ -21,27 +28,29 @@ export class Task{
 
     setProp(prop, newVal) {
         this[prop] = newVal;
-        //need checks for data types. 
-        //need check for project on list
     }
 }
 
 //update localStorage
+//make own module
 function updateLocalStorage(data) {
     //logic
 }
 
 export function getTaskList() {
-    // Return a shallow copy of the array, but deep copy the objects within. This is to protect the task data.
+    // Return a shallow copy of the array, but deep copy the objects within. This is to protect the task data. (I guess... that's what Chat GBT said)
     return _taskList.map(task => ({ ...task }));
 } 
 
 //push new task. Needs to be in Task class and run automatically?
+//add local storage
 export function addTasktoTaskList(task) {
     _taskList.push(task);
 }
 
 //delete a task
+//add local storage
+
 export function delTask(idNum) {
     _taskList.forEach((task, index) => {
         if (task.idNum === idNum) {
@@ -60,4 +69,39 @@ export function findTaskIDsInProject(projectName) {
     });
 
     return tasksIDsInProject;
+}
+
+export function getUserInputsFromDefaultCard(card) {
+    const inputData = collectTaskInfoFromDefaultCardInputs(card);
+    const formattedInputData = formatTaskInfoFromDefaultCardInputs(inputData);
+    return formattedInputData;
+}
+
+//collect task info from default card form
+ function collectTaskInfoFromDefaultCardInputs(card) {
+    const titleInput = card.querySelector("#todo-title-input").value;
+    const projectInput = card.querySelector("#todo-project-input").value;
+    const descriptionInput = card.querySelector("#todo-description-input").value;
+    const dueDateInput = card.querySelector("#todo-dueDate-input").value;
+    const priorityInput = card.querySelector("#todo-priority-input").textContent; //is btn
+
+    const inputData = {
+        title:  titleInput,
+        project: projectInput,
+        description: descriptionInput,
+        dueDate: dueDateInput,
+        priority: priorityInput,        
+    }
+
+    return inputData;
+}
+
+//format user inputs from default card
+function formatTaskInfoFromDefaultCardInputs(inputDataArg) {
+    const formattedInputData = Object.keys(inputDataArg).reduce((formattedData, key) => {
+        formattedData[key] = helperModule.userInputFormatter(inputDataArg[key]);
+        return formattedData;
+    },{});
+
+    return formattedInputData;
 }

@@ -2,109 +2,199 @@
 
 import * as projectModule from "./projectModule.js";
 import * as taskModule from "./taskModule.js";
+import * as eventListenerModule from "./eventListenerModuel.js";
+import * as filterModule from "./filterModule.js";
+import * as helperModule from "./helper.js";
+import * as errorTestModule from "./errorTestModule.js";
 
 //declarations
 const projectsListElm = document.querySelector("#projects-list");
 const mainContentContainer = document.querySelector("#main-content");
 
-//============================================ Major Functions ============================================
+//============================================ Major Functions ============================================//
 
 export function renderAll() {
-    //wipe all first?
+    clearDynamicDOM();
     renderProjectSidebarList();
     renderDefaultTodoCard();
     renderTodoCards();
+
+    //test
+    // console.log(taskModule.getTaskList());
 }
 
-//============================================ Project Functions ============================================
+function clearDynamicDOM() {
+    projectsListElm.innerHTML = "";
+    mainContentContainer.innerHTML = "";
+}
+
+//============================================ Project Functions ============================================//
 
 function renderProjectSidebarList() {    
-    const projectSidebarElms = createProjectElms("li");
+    const projectSidebarElms = creatProjectSidebarElms();
     renderProjectListToLocation(projectSidebarElms, projectsListElm);
 }
 
 function renderProjectListToLocation(elmList, location) { 
     elmList.forEach((elm) => {
-        appendElmToLocation(elm, location);
+        appendElmToLocation(elm, location, "append");
     });
 }
 
-//not sure if this follows the SOLID, but the code seem cleaner and this can update fairly easily
-function createProjectElms(elmType) {
+function creatProjectSidebarElms() {
     //get sorted projects list
     const orgProjList = projectModule.getOrganizeProjectsList();
-    //make elms
+
     const projectElms = [];
+    //make elms
     orgProjList.forEach((project) => {
-        const tempElm = createElm(elmType);
+        const projectElm = createElm("li"); //each project line is a container insude an li
 
-
-        // types of project elms to be made
-        if (elmType === "option") {
-            addValueToElm(tempElm, project);
-        }
-        else if (elmType === "li") {
-            addClassToElm(tempElm, "sidebar-project-li");
-        }
-        else { throw new Error("ERROR: elmType must be one of the following:\n- option \n- li "); }
-
-        tempElm.textContent = project;
-        projectElms.push(tempElm);
+        addClassToElm(projectElm, "sidebar-project-li");
+        
+        const sidebarProjListLine = createSidebarProjListLine(project);
+        appendElmToLocation(sidebarProjListLine, projectElm, "append");
+        
+        projectElms.push(projectElm);
     });
     
     return projectElms;
 }
 
-//============================================ DEFAULT Todo Card Functions ============================================
+function createSidebarProjListLine(projectName) {
+    const lineWrapper = createElm("div");
+    addClassToElm(lineWrapper, "sidebar-proj-list-line");
+
+    const projNameElm = createSidebarProjListName(projectName);
+    appendElmToLocation(projNameElm, lineWrapper, "append");
+
+    //add del/edit btns
+
+    return lineWrapper;
+}
+
+function createDropDownProjElms() {
+    //get sorted projects list
+    const orgProjList = projectModule.getOrganizeProjectsList();
+
+    const projectElms = [];
+    //make elms
+    orgProjList.forEach((project) => {
+        const projectElm = createElm("option"); //for <select>
+
+        addValueToElm(projectElm, project);
+        projectElm.textContent = project;
+
+        projectElms.push(projectElm);
+    });
+
+    //remove "all" from top. User may not add projects to "all"
+    projectElms.shift(); 
+    
+    return projectElms;    
+}
+
+function createSidebarProjListName(projectName) {
+    const projNameElm = createElm("div");
+    addClassToElm(projNameElm, "sidebar-proj-list-name");
+    projNameElm.textContent = projectName;
+    //add event listener
+    eventListenerModule.addELtoSidebarProjName(projNameElm);
+    return projNameElm;
+}
+
+//============================================ DEFAULT Todo Card Functions ============================================//
 
 function renderDefaultTodoCard() {
     const defaultTodoCard = createDefaultTodoCard();
-    appendElmToLocation(defaultTodoCard, mainContentContainer);
+    appendElmToLocation(defaultTodoCard, mainContentContainer, "append");
 }
 
 function createDefaultTodoCard() {
     //create card and append template
     const defaultTodoCard = createCard("div", "todo-card", "default-todo-card");
+    addClassToElm(defaultTodoCard, "def-todo-card-abridged");
+
     const templateClone = cloneTemplate("#default-todo-card-template");
-    appendElmToLocation(templateClone, defaultTodoCard);
+    appendElmToLocation(templateClone, defaultTodoCard, "append");
 
     populateDefaultTodoCard(defaultTodoCard);
+    addELsToDefaultCard(defaultTodoCard);
     
     return defaultTodoCard;
+}
+
+function addELsToDefaultCard(card) {
+    //submit task
+    const submitButton = card.querySelector("#submit-new-todo-button");
+    eventListenerModule.addELToDefaultCardSubmitBtn(submitButton, card);
+
+    //changeable priority btn
+    const priorityBtn = card.querySelector("#todo-priority-input");
+    eventListenerModule.addELToDefaultCardPriorityBtn(priorityBtn);
+
+    //show/hide btn
+    const showHideDetailsBtn = card.querySelector(".show-hide-details-btn");
+    eventListenerModule.addELtoDefaultShowHideDetailsBtn(showHideDetailsBtn, card);
+}
+
+export function defTodoCardShowHideDetailsBtnFunc(btn, card) {
+    if (btn.classList.contains("add-sign")) {
+        //edit btn to up arrow
+        btn.textContent = "▲";
+        btn.classList.remove("add-sign");
+        addClassToElm(btn, "up-arrow");
+        //edit card: remove abridged view
+        card.classList.remove("def-todo-card-abridged");
+    }
+    else if (btn.classList.contains("up-arrow")) {
+        //edit btn to add sign (is like "down arrow")
+        btn.textContent = "+";
+        btn.classList.remove("up-arrow");
+        addClassToElm(btn, "add-sign");
+        //edit card to abridged view
+        addClassToElm(card, "def-todo-card-abridged");
+    }
 }
 
 function populateDefaultTodoCard(card) { //passing card because it's created in js, not from HTML
     const projectSelectLine = card.querySelector("#todo-project-input");
     addProjDropDownToDefaultCard(projectSelectLine);
-    //add date handling
+
+    //add default date
+
 }
 
 function addProjDropDownToDefaultCard(projectSelectLineArg) {
-    const dropDownProjElms = createProjectElms("option"); 
-    renderProjectListToLocation(dropDownProjElms, projectSelectLineArg); 
+    //createProjectElms func uses the entire project list (need to remove "all")
+    const dropDownProjElms = createDropDownProjElms();
+    //append
+    renderProjectListToLocation(dropDownProjElms, projectSelectLineArg);
 }
 
-//============================================ Todo Card Functions ============================================
+//============================================ Todo Card Functions ============================================//
 
 function renderTodoCards() {
-    //may need to pass a taskListArg when introduce filtering task by project (or other)
-    //make getFilteredTaskList() in taskModule?
-    const taskList = taskModule.getTaskList();
-    taskList.forEach((task) => {
+    //use filtered taskList
+    const filteredTaskList = filterModule.getFilteredTaskList();
+    filteredTaskList.forEach((task) => {
         const newTodoCard = createToDoCard(task);
-        appendElmToLocation(newTodoCard, mainContentContainer);
+        appendElmToLocation(newTodoCard, mainContentContainer, "append");
     });
 }
 
 function createToDoCard(task) {
     //create card and append template
     const todoCard = createCard("div", "todo-card", task.idNum); //task.id will need string
+    //add in abridged class
+    addClassToElm(todoCard, "todo-card-abridged");
     const templateClone = cloneTemplate("#todo-card-template");
-    appendElmToLocation(templateClone, todoCard);
+    appendElmToLocation(templateClone, todoCard, "append");
 
     //populate template
     populateTodoCard(task, todoCard);
-
+    //add Els
+    addELsToTodoCard(todoCard)
     return todoCard;
 }
 
@@ -121,12 +211,170 @@ function populateTodoCard(task, card) {
     todoProjectElm.textContent = task.project;
     todoDescriptElm.textContent  = task.description;
     todoDueDateElm.textContent = task.dueDate;
-    //set priority class?
-
-
+    //set priority class here?
 }
 
-//============================================ Generic Functions ============================================
+function addELsToTodoCard(card) {
+    //show/hide detail btn
+    const showHideDetailsBtn = card.querySelector(".show-hide-details-btn");
+    eventListenerModule.addELtoTodoCardShowHideDetailsBtn(showHideDetailsBtn, card);
+    
+    //del task btn
+    const delTaskBtn = card.querySelector(".del-task-btn");
+    eventListenerModule.addELtoTodoCardDelTaskBtn(delTaskBtn, card);
+}
+
+export function todoCardShowHideDetailsBtnFunc(btn, card) {
+    if (btn.classList.contains("down-arrow")) {
+        //edit btn to up arrow
+        btn.textContent = "▲";
+        btn.classList.remove("down-arrow");
+        addClassToElm(btn, "up-arrow");
+        //edit card: remove abridged view
+        card.classList.remove("todo-card-abridged");
+    }
+    else if (btn.classList.contains("up-arrow")) {
+        //edit btn to down arrow
+        btn.textContent = "▼";
+        btn.classList.remove("up-arrow");
+        addClassToElm(btn, "down-arrow");
+        //edit card to abridged view
+        addClassToElm(card, "todo-card-abridged");
+    }
+}
+
+export function todoCardDelBtnChangeOnSelect(btn, card){
+    const delTaskConfirmLine = swapOutElm( //hides button and "replaces" with confirm delete line
+        btn, //elm to hide/unhide
+        () => delConfirmMessageElm("delete task?"), //makes first elm in new line
+        () => confirmDelTaskFunc(card) //confirm del logic
+    );
+    addClassToElm(delTaskConfirmLine, "del-task-confirm-line"); //additional class
+}
+
+function confirmDelTaskFunc(card) {
+    taskModule.delTask(card.id);
+    renderAll();
+}
+
+//============================================ Sidebar Functions ============================================//
+
+export function addProjBtnChangeOnSelect(btn) {
+    const btnAreaWrapper = btn.parentElement; //wrapper to hide
+
+    const addProjSidebarLine = swapOutElm( //hides wrapper and "swaps it out" with this new line
+        btnAreaWrapper, //element to hide/unhide
+        () => createNewProjInput(), //creates/appends input for user
+        () => confirmAddProjFunc(btnAreaWrapper, addProjSidebarLine) //confirm add project logic
+    );
+}
+
+function createNewProjInput() {
+    const projectInputElm = createElm("input");
+    addAttToElm(projectInputElm, "placeholder", "new project");
+    
+    return projectInputElm;
+}
+
+//add new project function
+function confirmAddProjFunc(wrapper, newInputLine) {
+    //collect and format user input
+    const rawProjInputVal = newInputLine.querySelector("input").value;
+    const newProjInputVal = helperModule.userInputFormatter(rawProjInputVal);
+    
+    //check user input
+    if (errorTestModule.checkHasErrorUserAddProjInputs(newProjInputVal)) {
+        
+        //make error function
+        
+        console.warn("ERROR: user project input error");
+    }
+    else {
+        projectModule.addProjectToProjectList(newProjInputVal);
+        
+        resetHiddenElm(wrapper, newInputLine);
+        renderAll();
+    }
+}
+
+//============================================ Derived Functions ============================================//
+
+function swapOutElm(elmToHide, firstElmFunc, confirmFunc) {
+    hideElm(elmToHide);
+
+    const newLineWrapper = createConfirmCancelLine(
+        elmToHide,
+        () => firstElmFunc(), 
+        confirmFunc
+    );
+
+    appendElmToLocation(newLineWrapper, elmToHide, "after"); //need make "after" a parameter in swapOutElm()?
+    newLineWrapper.style = "display: inline"; //to make stay on same line. Move to css?
+    
+    return newLineWrapper;    
+}
+
+function createConfirmCancelLine(hiddenElm, firstElmFunc, confirmFunc) {
+    const confirmCancelLine = createElm("div");
+    addClassToElm(confirmCancelLine, "confirm-cancel-line");
+
+    const firstElm = firstElmFunc();
+    firstElm.style = "display: inline"; //to make stay on same line. Move to css?
+    const confirmBtn = createConfirmBtn(() => confirmFunc());
+    const cancelBtn = createCancelBtn(hiddenElm, confirmCancelLine);
+
+    appendElmToLocation(firstElm, confirmCancelLine, "append");
+    appendElmToLocation(confirmBtn, confirmCancelLine, "append");
+    appendElmToLocation(cancelBtn, confirmCancelLine, "append");
+
+    return confirmCancelLine;    
+}
+
+function delConfirmMessageElm(message) {
+    //create stylized confirm del task message  
+    const delTaskConfirmMessage = createElm("div");
+    addClassToElm(delTaskConfirmMessage, "del-confirm-message");
+    delTaskConfirmMessage.textContent = message;
+    delTaskConfirmMessage.style = "font-style: italic"; //needs css instead
+    return delTaskConfirmMessage;
+}
+
+function createCancelBtn(hiddenElm, newElmToDel) {
+    const newCancelBtn = createBtn("↺", "cancel-btn", () => resetHiddenElm(hiddenElm, newElmToDel));
+    return newCancelBtn;
+}
+
+function createConfirmBtn(callbackConfirm) {
+    const newConfirmBtn = createBtn("✓", "confirm-btn", callbackConfirm);
+    return newConfirmBtn;
+}
+
+//============================================ Generic Functions ============================================//
+
+{} //spacer
+//could you do all this with Classes? like, const newCard = new Card. then call newCard.addClass(className)
+
+function hideElm(elmToHide) {
+    elmToHide.style = "display: none";
+}
+
+function createBtn(textContentArg, classNameArg, callbackFunc) {
+    const newBtn = createElm("button");
+    addClassToElm(newBtn, classNameArg);
+    newBtn.textContent = textContentArg;
+    
+    newBtn.addEventListener("click", () => {
+        callbackFunc();
+    });
+    
+    return newBtn;
+}
+
+function resetHiddenElm(hiddenElm, newElmToDel) {
+    hiddenElm.style = "display: initial" //reset to inline-block?
+    
+    newElmToDel.remove();
+}
 
 function createElm(elm) {
     const newElm = document.createElement(elm);
@@ -141,15 +389,14 @@ function addIDtoElm(elm, idArg) {
     elm.id = idArg;
 }
 
-function addDataAttToElm(elm, dataName, dataValue) {
-    elm.setAttribute(dataName, dataValue);
+function addAttToElm(elm, attName, attValue) {
+    elm.setAttribute(attName, attValue);
 }
 
 function addValueToElm(elm, value) {
     elm.value = value;
 }
 
-//could you do all this with Classes? like, const newCard = new Card. then call newCard.addClass(className)
 function createCard(element, classNameArg, IDArg) {
     const newCard = createElm(element, classNameArg, IDArg);
     addClassToElm(newCard, classNameArg);
@@ -165,25 +412,7 @@ function cloneTemplate(templateIDselector) {
     return clone;
 }
 
-//generically create elms from list
-//dont like this, want to choose to add class and ID and as needed when called (can make function for making specifc list that connects everything like this)
-function makeElmsFromList(element, classNameArg, list) {
-    //store the project li's in an array
-    const listElms = [];
-    //loop through projects, create LI, push to array
-    list.forEach((item) => {
-        const tempElm = createElm(element);
-        //addClass to list elsewhere? make function or loop through list all the call?
-        addClassToElm(tempElm, classNameArg);
-        tempElm.textContent = item;
-        listElms.push(tempElm);
-    });
-
-    return  listElms;
-}
-
 //generic place element on DOM
-//can use location[typeAppend]?
-function appendElmToLocation(element, location) {
-    location.append(element);
+function appendElmToLocation(element, location, typeAppend) {
+    location[typeAppend](element);
 }

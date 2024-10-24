@@ -19,102 +19,97 @@
             </div>
             <ul id="projects-list">
             </ul>
-
+            <div class="wrapper" id="add-project-btn-wrappper">
+                <button type="button" id="add-project-btn">+</button>
+            </div>
         </div>
     </div>
     <div id="main-content">
         <!-- populated by js -->
     </div>
 
-    <!-- ======================================================== -->
-    <!-- templates -->
-    <!-- ======================================================== -->
+    <!-- ============================================ templates ============================================ -->
 
     <!-- default todo card innerHTML template -->
     <template id="default-todo-card-template">
-        add task
-
-        <!-- title input -->
-        <div class="todo-input-line">
-            <input
-            type="text"
-            name="todo-title-input"
-            id="todo-title-input"
-            placeholder="title">
+        <div id="default-card-form-wrapper">
+            add task
+            <!-- title input -->
+            <div class="todo-input-line">
+                <input
+                type="text"
+                name="todo-title-input"
+                id="todo-title-input"
+                placeholder="title">
+            </div>
+            <!-- project input -->
+            <div class="todo-input-line">
+                <select id="todo-project-input">
+                    <option value="">select project</option>
+                </select>
+            </div>
+            <!-- description input -->
+            <div class="todo-input-line">
+                <textarea id="todo-description-input"
+                placeholder="description..."
+                rows="4"
+                cols="50"></textarea>
+            </div>
+            <!-- dueDate input -->
+            <div class="todo-input-line">
+                <input
+                type="date"
+                name="todo-dueDate-input"
+                id="todo-dueDate-input"
+                >
+            </div>
+            <!-- priority input -->
+            <div class="todo-input-line">
+                <button type="button" id="todo-priority-input">high</button>
+            </div>
+            <!-- submit -->
+            <button type="button" id="submit-new-todo-button">submit</button>
         </div>
-
-        <!-- project input -->
-        <div class="todo-input-line">
-            <select id="todo-project-input">
-                <option value="">select project</option>
-            </select>
-        </div>
-
-        <!-- description input -->
-        <div class="todo-input-line">
-            <textarea id="todo-description-input"
-            placeholder="description..."
-            rows="4"
-            cols="50"></textarea>
-        </div>
-
-        <!-- dueDate input -->
-        <div class="todo-input-line">
-            <input
-            type="date"
-            name="todo-dueDate-input"
-            id="todo-dueDate-input"
-            >
-        </div>
-
-        <!-- priority input -->
-        <div class="todo-input-line">
-            <button type="button" id="todo-priority-input">high</button>
-        </div>
-
-        <!-- submit -->
-        <button type="button" id="submit-new-todo-button">submit</button>
+        <button class="show-hide-details-btn add-sign down-arrow">+</button>
     </template>
 
 
     <!-- todo card innerHTML template -->
     <template id="todo-card-template">
-        new task
 
         <!-- title line -->
-        <div class="todo-data-line">
+        <div class="todo-data-line todo-data-line-title">
             <div class="todo-title">
                 <!-- populated by js -->
             </div>
         </div>
 
         <!-- project line -->
-        <div class="todo-data-line">
+        <div class="todo-data-line todo-data-line-project">
             <div class="todo-project">
                 <!-- populated by js -->
             </div>
         </div>
 
         <!-- description line -->
-        <div class="todo-data-line">
+        <div class="todo-data-line todo-data-line-description">
             <div class="todo-description">
                 <!-- populated by js -->
             </div>
         </div>
 
         <!-- dueDate line -->
-        <div class="todo-data-line">
+        <div class="todo-data-line todo-data-line-dueDate">
             <div class="todo-dueDate">
                 <!-- populated by js -->
             </div>
         </div>
 
         <!-- priority line -->
-         <!-- just use a color for priority (keeping it basic) -->
-        <!-- <div class="todo-data-line">
-            <div id="todo-priority">
-            </div>
-        </div> -->
+        <!-- just use a color for priority (keeping it basic) -->
+
+        <button class="show-hide-details-btn down-arrow">▼</button>
+        <button class="del-task-btn">⨉</button>
 
     </template>
 </body> 
