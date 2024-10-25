@@ -48,14 +48,13 @@ function creatProjectSidebarElms() {
     const projectElms = [];
     //make elms
     orgProjList.forEach((project) => {
-        const projectElm = createElm("li"); //each project line is a container insude an li
-
+        const projectElm = createElm("li"); //each project line is a container inside an li
         addClassToElm(projectElm, "sidebar-project-li");
         
-        const sidebarProjListLine = createSidebarProjListLine(project);
-        appendElmToLocation(sidebarProjListLine, projectElm, "append");
+        const sidebarProjListLine = createSidebarProjListLine(project); //this is the "container" for the li. Contains name (with filter EL), edit/del btns
+        appendElmToLocation(sidebarProjListLine, projectElm, "append"); //place container in li
         
-        projectElms.push(projectElm);
+        projectElms.push(projectElm); //store in list of sidebar project li's
     });
     
     return projectElms;
@@ -75,7 +74,7 @@ function createSidebarProjListLine(projectName) {
         const editBtn = createEditBtn( //create edit btn 
             () => swapOutElm( //swaps out project line for edit project line on edit btn select
                 lineWrapper,
-                () => createNewProjInput("value", projectName), //creates new inputline for use
+                () => createNewProjInput("value", projectName), //creates new input line for user
                 () => sidebarEditProjConfirmFunc(), //edit project logic
                 true //is an edit line
             ) 
@@ -83,10 +82,35 @@ function createSidebarProjListLine(projectName) {
         appendElmToLocation(editBtn, lineWrapper, "append");
 
         //del btn
-        // const delBtn = createSidebar //delBtn here?
+        const delBtn = createDelBtn( //create del btn
+            () => swapOutElm( //swaps out project line for del project line on del btn select
+                lineWrapper,
+                () => createDelProjFirstElm(projectName), //  edit //creates first elm: project name (del version) and confirm del message
+                () => console.log("need del logic")
+            )
+        ); 
+        appendElmToLocation(delBtn, lineWrapper, "append");
     }
 
     return lineWrapper;
+}
+
+function createDelProjFirstElm(projectName) {
+    const delProjFirstElm = createElm("div"); // cotainer elm. This has two elm's: project name (del version) and confirm del message
+    addClassToElm(delProjFirstElm, "del-sidebar-proj-list-first-elm");
+    delProjFirstElm.style = "display: inline";
+
+    //project name: del version
+    const delProjNameElm = createElm("div");
+    addClassToElm(delProjNameElm, "del-sidebar-proj-list-name");
+    delProjNameElm.textContent = projectName;
+    appendElmToLocation(delProjNameElm, delProjFirstElm, "append");
+    
+    //del message
+    const confirmDelMessageElm = delConfirmMessageElm("wipe project?");
+    appendElmToLocation(confirmDelMessageElm, delProjFirstElm, "append");
+
+    return delProjFirstElm;
 }
 
 function sidebarEditProjConfirmFunc() {
@@ -368,13 +392,17 @@ function delConfirmMessageElm(message) {
     const delTaskConfirmMessage = createElm("div");
     addClassToElm(delTaskConfirmMessage, "del-confirm-message");
     delTaskConfirmMessage.textContent = message;
-    delTaskConfirmMessage.style = "font-style: italic"; //needs css instead
     return delTaskConfirmMessage;
 }
 
 function createEditBtn(selectBtnFunc) {
     const newEditBtn = createBtn("✎", "edit-btn", selectBtnFunc);
     return newEditBtn;
+}
+
+function createDelBtn(selectBtnFunc) {
+    const newDelBtn = createBtn("⨉", "del-btn", selectBtnFunc);
+    return newDelBtn;
 }
 
 function createCancelBtn(hiddenElm, newElmToDel) {

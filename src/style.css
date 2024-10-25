@@ -37,14 +37,27 @@ body {
 }
 
 #sidebar {
+    background-color: var(--color-sec);
+    color: var(--color-main);
+
+    margin-left: var(--padding);
+
     
     .sidebar-project-li {
+        /* set firm width */
         width: fit-content;
+
+        .del-sidebar-proj-list-name {
+            text-decoration: line-through;
+        }
+
     }
 
 }
 
 #main-content {
+    padding-top: calc(-1 * var(--padding));
+
     display: grid;
     gap: var(--padding);
     align-content: start;
@@ -78,3 +91,7 @@ body {
     }
 }
 
+/* catch all */
+.del-confirm-message {
+    font-style: italic;
+}
