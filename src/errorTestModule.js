@@ -39,6 +39,16 @@ export function checkHasErrorUserAddProjInputs(userInput) {
     return hasError;
 }
 
+export function checkHasErrorUserInputEditProject(userInput) {
+    let hasError = false;
+    //check for blank input
+    if (checkForHasBlankInput(userInput)) {
+        hasError = true;
+    }
+
+    return hasError;
+}
+
 //============================================ Generic Checks ============================================//
 
 function checkForHasBlankInput(input) {

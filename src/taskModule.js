@@ -22,10 +22,12 @@ export class Task{
         this.idNum = getNewIDnum();
     }
 
+    //update localStorage
     getProp(prop) {
         return this[prop];
     }
 
+    //update localStorage
     setProp(prop, newVal) {
         this[prop] = newVal;
     }
@@ -104,4 +106,13 @@ function formatTaskInfoFromDefaultCardInputs(inputDataArg) {
     },{});
 
     return formattedInputData;
+}
+
+//updateLocal storage
+export function updateAllTasksThatMatch(prop, oldValue, newValue) {
+    _taskList.forEach((task) => {
+        if (task.getProp(prop) === oldValue) {
+            task.setProp(prop, newValue); 
+        }
+    });
 }

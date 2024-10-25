@@ -75,7 +75,7 @@ function createSidebarProjListLine(projectName) {
             () => swapOutElm( //swaps out project line for edit project line on edit btn select
                 lineWrapper,
                 () => createNewProjInput("value", projectName), //creates new input line for user
-                () => sidebarEditProjConfirmFunc(), //edit project logic
+                (event) => sidebarEditProjConfirmFunc(event, projectName), //edit project logic
                 true //is an edit line
             ) 
         ); 
@@ -85,11 +85,10 @@ function createSidebarProjListLine(projectName) {
         const delBtn = createDelBtn( //create del btn
             () => swapOutElm( //swaps out project line for del project line on del btn select
                 lineWrapper,
-                // () => createDelProjFirstElm(projectName), //creates first elm: project name (del version) and confirm del message
                 () => delConfirmMessageElm("wipe project?"), //  edit //creates first elm: project name (del version) and confirm del message
                 () => console.log("need del logic"), 
                 false, 
-                true
+                true //is delLine
             )
         ); 
         appendElmToLocation(delBtn, lineWrapper, "append");
@@ -98,26 +97,23 @@ function createSidebarProjListLine(projectName) {
     return lineWrapper;
 }
 
-function createDelProjFirstElm(projectName) {
-    const delProjFirstElm = createElm("div"); // cotainer elm. This has two elm's: project name (del version) and confirm del message
-    addClassToElm(delProjFirstElm, "del-sidebar-proj-list-first-elm");
-    delProjFirstElm.style = "display: inline";
+//could abstract this for todo edits
+function sidebarEditProjConfirmFunc(event, projectName) {
+    //use event to walk up to parent and down to user input
+    const thisConfirmBtn = event.target;
+    const thisConfirmCancelLine = thisConfirmBtn.parentElement;
+    const thisInputElm = thisConfirmCancelLine.querySelector("input");
+    const rawUserInput = thisInputElm.value;
+    const newUserInput = helperModule.userInputFormatter(rawUserInput);
 
-    // //project name: del version
-    // const delProjNameElm = createElm("div");
-    // addClassToElm(delProjNameElm, "del-sidebar-proj-list-name");
-    // delProjNameElm.textContent = projectName;
-    // appendElmToLocation(delProjNameElm, delProjFirstElm, "append");
-    
-    //del message
-    const confirmDelMessageElm = delConfirmMessageElm("wipe project?");
-    appendElmToLocation(confirmDelMessageElm, delProjFirstElm, "append");
-
-    return delProjFirstElm;
-}
-
-function sidebarEditProjConfirmFunc() {
-    console.warn("sidebarEditProjConfirmFunc needs logic")
+    //if no error, edit project
+    if (!errorTestModule.checkHasErrorUserInputEditProject(newUserInput)) {
+        projectModule.updateEntireProjectProjtName(projectName, newUserInput);
+        renderAll();
+    }
+    else {
+        console.warn("ERROR: user input error");
+    }
 }
 
 function createSidebarProjListName(projectName) {
@@ -365,7 +361,7 @@ function swapOutElm(elmToHide, firstElmFunc, confirmFunc, isForEditLine, isForDe
         swapOutIsForEditLine (newLineWrapper);
     }
 
-    //special case for del lines. Needs extra class and to focus/select on input
+    //special case for del lines. Needs stylize project name atop the confirmCancelLine
     if (isForDelLine) {
         swapOutIsForDelLine(newLineWrapper, elmToHide);
     }
@@ -374,7 +370,7 @@ function swapOutElm(elmToHide, firstElmFunc, confirmFunc, isForEditLine, isForDe
 }
 
 function swapOutIsForDelLine(newWrapper, hiddenElm) {
-    const elmToDelVal = hiddenElm.querySelector(".sidebar-proj-list-name").textContent;
+    const elmToDelVal = hiddenElm.querySelector("* > *").textContent; //grab textContent of the original line's first child (has the data value needed)
 
     const delLineValElm = createElm("div");
     addClassToElm(delLineValElm, "del-val-name");
@@ -395,7 +391,7 @@ function createConfirmCancelLine(hiddenElm, firstElmFunc, confirmFunc) {
 
     const firstElm = firstElmFunc();
     firstElm.style = "display: inline"; //to make stay on same line. Move to css?
-    const confirmBtn = createConfirmBtn(() => confirmFunc());
+    const confirmBtn = createConfirmBtn(confirmFunc);
     const cancelBtn = createCancelBtn(hiddenElm, confirmCancelLine);
 
     appendElmToLocation(firstElm, confirmCancelLine, "append");
@@ -447,9 +443,7 @@ function createBtn(textContentArg, classNameArg, callbackFunc) {
     addClassToElm(newBtn, classNameArg);
     newBtn.textContent = textContentArg;
     
-    newBtn.addEventListener("click", () => {
-        callbackFunc();
-    });
+    newBtn.addEventListener("click", callbackFunc);
     
     return newBtn;
 }

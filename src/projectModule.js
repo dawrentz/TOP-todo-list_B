@@ -39,6 +39,18 @@ export function addProjectToProjectList(project) {
     _projectList.push(project);
 }
 
+export function updateEntireProjectProjtName(oldProj, newProj) {
+    //delete project from project list
+    delProjectFromProjectList(oldProj);
+    //add project if not already in list
+
+    if (!getProjectList().includes(newProj)) {
+        addProjectToProjectList(newProj);
+    }
+
+    taskModule.updateAllTasksThatMatch("project", oldProj, newProj);
+}
+
 //remove project form list
 //add local storage
 export function delProjectFromProjectList(projectName) {
