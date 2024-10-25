@@ -17,9 +17,6 @@ todo:
     -date formatting
     -date default
 
-    
-
 now:
     -add/del btns to sidebar project list
-        edit btn needs logic
         delBtn logic needs abstraction from todo-task delete button

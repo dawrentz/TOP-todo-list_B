@@ -86,7 +86,7 @@ function createSidebarProjListLine(projectName) {
             () => swapOutElm( //swaps out project line for del project line on del btn select
                 lineWrapper,
                 () => delConfirmMessageElm("wipe project?"), //  edit //creates first elm: project name (del version) and confirm del message
-                () => console.log("need del logic"), 
+                () => sidebarDelProjConfirmFunc(projectName), 
                 false, 
                 true //is delLine
             )
@@ -95,6 +95,11 @@ function createSidebarProjListLine(projectName) {
     }
 
     return lineWrapper;
+}
+
+function sidebarDelProjConfirmFunc(projectName) {
+    projectModule.wipeEntireProject(projectName);
+    renderAll();
 }
 
 //could abstract this for todo edits
