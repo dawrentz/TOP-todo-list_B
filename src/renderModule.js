@@ -85,8 +85,11 @@ function createSidebarProjListLine(projectName) {
         const delBtn = createDelBtn( //create del btn
             () => swapOutElm( //swaps out project line for del project line on del btn select
                 lineWrapper,
-                () => createDelProjFirstElm(projectName), //  edit //creates first elm: project name (del version) and confirm del message
-                () => console.log("need del logic")
+                // () => createDelProjFirstElm(projectName), //creates first elm: project name (del version) and confirm del message
+                () => delConfirmMessageElm("wipe project?"), //  edit //creates first elm: project name (del version) and confirm del message
+                () => console.log("need del logic"), 
+                false, 
+                true
             )
         ); 
         appendElmToLocation(delBtn, lineWrapper, "append");
@@ -100,11 +103,11 @@ function createDelProjFirstElm(projectName) {
     addClassToElm(delProjFirstElm, "del-sidebar-proj-list-first-elm");
     delProjFirstElm.style = "display: inline";
 
-    //project name: del version
-    const delProjNameElm = createElm("div");
-    addClassToElm(delProjNameElm, "del-sidebar-proj-list-name");
-    delProjNameElm.textContent = projectName;
-    appendElmToLocation(delProjNameElm, delProjFirstElm, "append");
+    // //project name: del version
+    // const delProjNameElm = createElm("div");
+    // addClassToElm(delProjNameElm, "del-sidebar-proj-list-name");
+    // delProjNameElm.textContent = projectName;
+    // appendElmToLocation(delProjNameElm, delProjFirstElm, "append");
     
     //del message
     const confirmDelMessageElm = delConfirmMessageElm("wipe project?");
@@ -345,7 +348,7 @@ function confirmAddProjFunc(wrapper, newInputLine) {
 
 //============================================ Derived Functions ============================================//
 
-function swapOutElm(elmToHide, firstElmFunc, confirmFunc, isForEditLine) {
+function swapOutElm(elmToHide, firstElmFunc, confirmFunc, isForEditLine, isForDelLine) {
     hideElm(elmToHide);
 
     const newLineWrapper = createConfirmCancelLine(
@@ -361,11 +364,26 @@ function swapOutElm(elmToHide, firstElmFunc, confirmFunc, isForEditLine) {
     if (isForEditLine) {
         swapOutIsForEditLine (newLineWrapper);
     }
+
+    //special case for del lines. Needs extra class and to focus/select on input
+    if (isForDelLine) {
+        swapOutIsForDelLine(newLineWrapper, elmToHide);
+    }
     
     return newLineWrapper;    
 }
 
-function swapOutIsForEditLine (newWrapper) {
+function swapOutIsForDelLine(newWrapper, hiddenElm) {
+    const elmToDelVal = hiddenElm.querySelector(".sidebar-proj-list-name").textContent;
+
+    const delLineValElm = createElm("div");
+    addClassToElm(delLineValElm, "del-val-name");
+    delLineValElm.textContent = elmToDelVal;
+
+    appendElmToLocation(delLineValElm, newWrapper, "prepend");
+}
+
+function swapOutIsForEditLine(newWrapper) {
     addClassToElm(newWrapper, "edit-line");
     const newWrapperInput = newWrapper.querySelector("input");
     newWrapperInput.select();

@@ -46,11 +46,6 @@ body {
     .sidebar-project-li {
         /* set firm width */
         width: fit-content;
-
-        .del-sidebar-proj-list-name {
-            text-decoration: line-through;
-        }
-
     }
 
 }
@@ -94,4 +89,8 @@ body {
 /* catch all */
 .del-confirm-message {
     font-style: italic;
+}
+
+.del-val-name {
+    text-decoration: line-through;
 }
