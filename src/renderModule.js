@@ -276,6 +276,10 @@ function addEditBtnsToTodoCardLines(todoCardArg, taskID) {
         const propToChange = helperModule.extractTaskPropFromTodoLineClass(specificClassName);
         //grab previous data
         const dataLineOldVal = taskModule.findTaskProp(taskID, propToChange);
+        
+        //test
+        console.log(dataLineOldVal);
+
         //create specific input for data line type 
         let createInputCallbackFunc; 
 
@@ -322,8 +326,8 @@ function addEditBtnsToTodoCardLines(todoCardArg, taskID) {
         else if (propToChange === "dueDate") {
             //create date input            
             createInputCallbackFunc = () => {
-                console.warn("needs date input")
-                // return newInput;
+                const newInput = createNewInput("value", dataLineOldVal, "date"); //creates specific input line for user
+                return newInput;
             }
         }
 
@@ -374,9 +378,6 @@ function todoDataLineEditBtnConfirmFunc(event, taskID, propToChangeArg) {
     }
     
 }
-
-
-
 
 function populateTodoCardInfo(task, card) {
     //collect elms to populate
