@@ -94,3 +94,9 @@ body {
 .del-val-name {
     text-decoration: line-through;
 }
+
+/* elms that need to stay on same line (usually from swapOutLine() */
+.todo-data-line > *:first-child /* first elm of todo-data-line (to add edit btn) */
+{
+    display: inline;
+}

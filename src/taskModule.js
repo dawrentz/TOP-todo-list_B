@@ -52,7 +52,6 @@ export function addTasktoTaskList(task) {
 
 //delete a task
 //add local storage
-
 export function delTask(idNum) {
     _taskList.forEach((task, index) => {
         if (task.idNum === idNum) {
@@ -110,9 +109,25 @@ function formatTaskInfoFromDefaultCardInputs(inputDataArg) {
 
 //updateLocal storage
 export function updateAllTasksThatMatch(prop, oldValue, newValue) {
+    findAndUpdateTask(prop, oldValue, prop, newValue);
+}
+
+export function findAndUpdateTask(propToFindBy, taskPropValtoFind, propToChange, changedPropNewVal) {
     _taskList.forEach((task) => {
-        if (task.getProp(prop) === oldValue) {
-            task.setProp(prop, newValue); 
+        if (task.getProp(propToFindBy) === taskPropValtoFind) {
+            task.setProp(propToChange, changedPropNewVal); 
         }
     });
+}
+
+export function findTaskProp(taskIDnum, propToFind) {
+    let returnProp;
+
+    _taskList.forEach((task) => {
+        if (task.idNum === taskIDnum) {
+            returnProp = task.getProp(propToFind);
+        }
+    });
+    
+    return returnProp;
 }

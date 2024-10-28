@@ -11,3 +11,11 @@ export function userInputFormatter(input) {
     //remove bookend whitespace
     return stringInput.trim();
 }
+
+export function extractTaskPropFromTodoLineClass(className) {
+    const classNameArray = className.split("-"); //task prop is the last word in the kebab case class name
+    const propToExtract = classNameArray[classNameArray.length - 1];
+    
+    return propToExtract; 
+
+}

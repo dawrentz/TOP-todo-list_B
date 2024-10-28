@@ -25,3 +25,25 @@ const task3 = new taskModule.Task("task3", "project 2", "descripton3", "dueDateY
 taskModule.addTasktoTaskList(task3);
 
 renderModule.renderAll();
+
+
+//test
+// const bodyElm = document.querySelector("body");
+
+// function addELtoElm(elm, callback) {
+//     elm.addEventListener("click", callback);
+// }
+
+// function clickBodyFunc(event, text) {
+//     innerEventFunc(event);
+//     console.log(text);
+// }
+
+// function innerEventFunc(event) {
+//     console.log(event.target);
+
+// }
+
+// addELtoElm(bodyElm, (event) => clickBodyFunc(event, "textTest"));
+
+

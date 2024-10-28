@@ -74,7 +74,7 @@ function createSidebarProjListLine(projectName) {
         const editBtn = createEditBtn( //create edit btn 
             () => swapOutElm( //swaps out project line for edit project line on edit btn select
                 lineWrapper,
-                () => createNewProjInput("value", projectName), //creates new input line for user
+                () => createNewInput("value", projectName), //creates new input line for user
                 (event) => sidebarEditProjConfirmFunc(event, projectName), //edit project logic
                 true //is an edit line
             ) 
@@ -85,7 +85,7 @@ function createSidebarProjListLine(projectName) {
         const delBtn = createDelBtn( //create del btn
             () => swapOutElm( //swaps out project line for del project line on del btn select
                 lineWrapper,
-                () => delConfirmMessageElm("wipe project?"), //  edit //creates first elm: project name (del version) and confirm del message
+                () => delConfirmMessageElm("wipe project?"), //creates first elm: project name (del version) and confirm del message
                 () => sidebarDelProjConfirmFunc(projectName), 
                 false, 
                 true //is delLine
@@ -104,12 +104,7 @@ function sidebarDelProjConfirmFunc(projectName) {
 
 //could abstract this for todo edits
 function sidebarEditProjConfirmFunc(event, projectName) {
-    //use event to walk up to parent and down to user input
-    const thisConfirmBtn = event.target;
-    const thisConfirmCancelLine = thisConfirmBtn.parentElement;
-    const thisInputElm = thisConfirmCancelLine.querySelector("input");
-    const rawUserInput = thisInputElm.value;
-    const newUserInput = helperModule.userInputFormatter(rawUserInput);
+    const newUserInput = grabUserInput(event);
 
     //if no error, edit project
     if (!errorTestModule.checkHasErrorUserInputEditProject(newUserInput)) {
@@ -131,19 +126,13 @@ function createSidebarProjListName(projectName) {
     return projNameElm;
 }
 
-function createNewProjInput(attToAdd, attValue) {
-    const projectInputElm = createElm("input");
-    addAttToElm(projectInputElm, attToAdd, attValue);
-    
-    return projectInputElm;
-}
-
-function createDropDownProjElms() {
+function createDropDownProjElms(includeDefaultOption) {
     //get sorted projects list
     const orgProjList = projectModule.getOrganizeProjectsList();
 
     const projectElms = [];
-    //make elms
+
+    //make project elms
     orgProjList.forEach((project) => {
         const projectElm = createElm("option"); //for <select>
 
@@ -152,9 +141,21 @@ function createDropDownProjElms() {
 
         projectElms.push(projectElm);
     });
-
+    
     //remove "all" from top. User may not add projects to "all"
     projectElms.shift(); 
+    
+    //if "select project" option needed at top
+    if (includeDefaultOption) {
+        const projectElmDef = createElm("option"); //for <select>
+
+        addValueToElm(projectElmDef, ""); //no value for default selection
+        projectElmDef.textContent = "select project";
+
+        projectElms.unshift(projectElmDef);
+    }
+
+
     
     return projectElms;    
 }
@@ -247,14 +248,137 @@ function createToDoCard(task) {
     const templateClone = cloneTemplate("#todo-card-template");
     appendElmToLocation(templateClone, todoCard, "append");
 
-    //populate template
-    populateTodoCard(task, todoCard);
-    //add Els
+    //add Els to HTML elements
     addELsToTodoCard(todoCard)
+    //populate template
+    populateTodoCardInfo(task, todoCard);
+
+    //add edit btns
+    addEditBtnsToTodoCardLines(todoCard, task.idNum);
+
+
+
+
     return todoCard;
 }
 
-function populateTodoCard(task, card) {
+function addEditBtnsToTodoCardLines(todoCardArg, taskID) {
+    //grab all todo data lines (the wrappers to hide, and where the edit btns will go)
+    const allTodoDataLines = todoCardArg.querySelectorAll(".todo-data-line");
+
+    //loop through each line and add specific input types as needed
+    allTodoDataLines.forEach((dataLine) => {
+        //set args in if/thens and call addEditBtnToTodoLine() once at end
+        
+        
+        //grab class name and pull out the task prop being edited
+        const specificClassName = dataLine.classList[1]; //task prop in in the second array item className. May be better to assign those lines specific data attribute in the HTML template and reference here
+        const propToChange = helperModule.extractTaskPropFromTodoLineClass(specificClassName);
+        //grab previous data
+        const dataLineOldVal = taskModule.findTaskProp(taskID, propToChange);
+        //create specific input for data line type 
+        let createInputCallbackFunc; 
+
+        //set callback func for each type of line. Each line need a specific type of input for the user edit
+        //for title line
+        if (propToChange === "title") {
+            //create text input            
+            createInputCallbackFunc = () => {
+                const newInput = createNewInput("value", dataLineOldVal, "text"); //creates specific input line for user
+                return newInput;
+            }
+        }
+
+        //for project line
+        else if (propToChange === "project") {
+            //create select drop-down            
+            createInputCallbackFunc = () => {
+                //create outer <select>
+                const newInput = createElm("select");
+                addClassToElm(newInput, "edit-todo-project-input");
+
+                //create/append <option>'s to <select>
+                const dropDownElms = createDropDownProjElms(true);
+                dropDownElms.forEach((option) => {
+                    appendElmToLocation(option, newInput, "append");
+                });
+
+                return newInput;
+            }
+        }
+
+        //for description line
+        else if (propToChange === "description") {
+            //create textarea input            
+            createInputCallbackFunc = () => {
+                const newInput = createElm("textarea");
+                addClassToElm(newInput, "edit-todo-description-input");
+                addValueToElm(newInput, dataLineOldVal);
+                return newInput;
+            }         
+        }
+
+        //for dueDate line
+        else if (propToChange === "dueDate") {
+            //create date input            
+            createInputCallbackFunc = () => {
+                console.warn("needs date input")
+                // return newInput;
+            }
+        }
+
+        addEditBtnToTodoLine( 
+            dataLine, //pass through line to hide
+            createInputCallbackFunc,
+            taskID, //to find task by id
+            propToChange
+        );
+
+
+
+
+    });
+}
+
+function addEditBtnToTodoLine(dataLine, inputTypeCallback, taskID, propToChangeArg) {
+    //title editBtn and func
+    const todoLineEditBtn = createEditBtn( //create edit btn 
+        () => swapOutElm( //swaps out project line for edit project line on edit btn select
+            dataLine, //line to hide
+            inputTypeCallback, //creates new input line for user
+            (event) => todoDataLineEditBtnConfirmFunc(event, taskID, propToChangeArg), //edit title logic
+            true //is an edit line
+        ) 
+    ); 
+    
+    appendElmToLocation(todoLineEditBtn, dataLine, "append");
+}
+
+
+function todoDataLineEditBtnConfirmFunc(event, taskID, propToChangeArg) {
+    const newUserInput = grabUserInput(event);
+    let readyToRender = true;
+    
+    //run input check
+    if (propToChangeArg !== "description") { //exclusions
+        readyToRender = !errorTestModule.checkHasErrorUserInputEditProject(newUserInput); //hasError returns true if error, so use ! for opposite
+    }
+    
+    //run if all is ready
+    if (readyToRender) {
+        taskModule.findAndUpdateTask("idNum", taskID, propToChangeArg, newUserInput);
+        renderAll();//maybe not renderAll? just update that line? (better UI)
+    }
+    else {
+        console.warn("ERROR: user input error");
+    }
+    
+}
+
+
+
+
+function populateTodoCardInfo(task, card) {
     //collect elms to populate
     const todoTitleElm = card.querySelector(".todo-title");
     const todoProjectElm = card.querySelector(".todo-project");
@@ -265,7 +389,7 @@ function populateTodoCard(task, card) {
     //link elms to task prop to populate
     todoTitleElm.textContent = task.title;
     todoProjectElm.textContent = task.project;
-    todoDescriptElm.textContent  = task.description;
+    todoDescriptElm.textContent  = task.description === "" ? "description" : task.description; //nicer UI to see where the description line is, vs there being just an editBtn floating there after project name
     todoDueDateElm.textContent = task.dueDate;
     //set priority class here?
 }
@@ -320,7 +444,7 @@ export function addProjBtnChangeOnSelect(btn) {
 
     const addProjSidebarLine = swapOutElm( //hides wrapper and "swaps it out" with this new line
         btnAreaWrapper, //element to hide/unhide
-        () => createNewProjInput("placeholder", "new project"), //creates/appends input for user
+        () => createNewInput("placeholder", "new project"), //creates/appends input for user
         () => confirmAddProjFunc(btnAreaWrapper, addProjSidebarLine), //confirm add project logic
         true
     );
@@ -354,7 +478,7 @@ function swapOutElm(elmToHide, firstElmFunc, confirmFunc, isForEditLine, isForDe
 
     const newLineWrapper = createConfirmCancelLine(
         elmToHide,
-        () => firstElmFunc(), 
+        firstElmFunc, 
         confirmFunc
     );
 
@@ -386,8 +510,21 @@ function swapOutIsForDelLine(newWrapper, hiddenElm) {
 
 function swapOutIsForEditLine(newWrapper) {
     addClassToElm(newWrapper, "edit-line");
-    const newWrapperInput = newWrapper.querySelector("input");
-    newWrapperInput.select();
+    const newWrapperInput = newWrapper.querySelector(":first-child");
+    if (newWrapperInput.tagName !== "SELECT") {
+        newWrapperInput.select(); 
+    }
+}
+
+function grabUserInput(event) { //used in edit lines
+    //use event to walk up to parent and down to user input
+    const thisConfirmBtn = event.target;
+    const thisConfirmCancelLine = thisConfirmBtn.parentElement;
+    const thisUserInputElm = thisConfirmCancelLine.querySelector(":first-child"); //first child in 
+    const rawUserInput = thisUserInputElm.value;
+    const newUserInput = helperModule.userInputFormatter(rawUserInput);
+    
+    return newUserInput;
 }
 
 function createConfirmCancelLine(hiddenElm, firstElmFunc, confirmFunc) {
@@ -438,6 +575,20 @@ function createConfirmBtn(callbackConfirm) {
 
 {} //spacer
 //could you do all this with Classes? like, const newCard = new Card. then call newCard.addClass(className)
+
+function createNewInput(attToAdd, attValue, inputType) {
+    const projectInputElm = createElm("input");
+    addAttToElm(projectInputElm, attToAdd, attValue);
+
+    if (inputType === undefined) {
+        addAttToElm(projectInputElm, "type", "text");
+    }
+    else {
+        addAttToElm(projectInputElm, "type", inputType);
+    }
+    
+    return projectInputElm;
+}
 
 function hideElm(elmToHide) {
     elmToHide.style = "display: none";

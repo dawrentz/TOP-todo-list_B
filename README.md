@@ -11,12 +11,11 @@ personal notes:
 
 todo:
     -add localStorage module
-    -edit todo lines
     -priority class color
     -css
     -date formatting
     -date default
 
 now:
-    -add/del btns to sidebar project list
-        delBtn logic needs abstraction from todo-task delete button
+    -edit todo lines
+        -
