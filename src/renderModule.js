@@ -276,10 +276,6 @@ function addEditBtnsToTodoCardLines(todoCardArg, taskID) {
         const propToChange = helperModule.extractTaskPropFromTodoLineClass(specificClassName);
         //grab previous data
         const dataLineOldVal = taskModule.findTaskProp(taskID, propToChange);
-        
-        //test
-        console.log(dataLineOldVal);
-
         //create specific input for data line type 
         let createInputCallbackFunc; 
 
