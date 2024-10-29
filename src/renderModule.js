@@ -109,6 +109,7 @@ function sidebarEditProjConfirmFunc(event, projectName) {
     //if no error, edit project
     if (!errorTestModule.checkHasErrorUserInputEditProject(newUserInput)) {
         projectModule.updateEntireProjectProjtName(projectName, newUserInput);
+        eventListenerModule.updateDocumentELneedsRemoveTrue(); //handles line reset if user clicks confirm but has error
         renderAll();
     }
     else {
@@ -280,6 +281,7 @@ function addEditBtnsToTodoCardLines(todoCardArg, taskID) {
         let createInputCallbackFunc; 
 
         //set callback func for each type of line. Each line need a specific type of input for the user edit
+        
         //for title line
         if (propToChange === "title") {
             //create text input            
@@ -288,7 +290,6 @@ function addEditBtnsToTodoCardLines(todoCardArg, taskID) {
                 return newInput;
             }
         }
-
         //for project line
         else if (propToChange === "project") {
             //create select drop-down            
@@ -306,7 +307,6 @@ function addEditBtnsToTodoCardLines(todoCardArg, taskID) {
                 return newInput;
             }
         }
-
         //for description line
         else if (propToChange === "description") {
             //create textarea input            
@@ -317,7 +317,6 @@ function addEditBtnsToTodoCardLines(todoCardArg, taskID) {
                 return newInput;
             }         
         }
-
         //for dueDate line
         else if (propToChange === "dueDate") {
             //create date input            
@@ -327,16 +326,13 @@ function addEditBtnsToTodoCardLines(todoCardArg, taskID) {
             }
         }
 
+        //create edit bnt with proper callback or input creation
         addEditBtnToTodoLine( 
             dataLine, //pass through line to hide
             createInputCallbackFunc,
             taskID, //to find task by id
             propToChange
         );
-
-
-
-
     });
 }
 
@@ -354,7 +350,6 @@ function addEditBtnToTodoLine(dataLine, inputTypeCallback, taskID, propToChangeA
     appendElmToLocation(todoLineEditBtn, dataLine, "append");
 }
 
-
 function todoDataLineEditBtnConfirmFunc(event, taskID, propToChangeArg) {
     const newUserInput = grabUserInput(event);
     let readyToRender = true;
@@ -367,6 +362,7 @@ function todoDataLineEditBtnConfirmFunc(event, taskID, propToChangeArg) {
     //run if all is ready
     if (readyToRender) {
         taskModule.findAndUpdateTask("idNum", taskID, propToChangeArg, newUserInput);
+        eventListenerModule.updateDocumentELneedsRemoveTrue(); //handles line reset if user clicks confirm but has error
         renderAll();//maybe not renderAll? just update that line? (better UI)
     }
     else {
@@ -401,6 +397,7 @@ function addELsToTodoCard(card) {
     eventListenerModule.addELtoTodoCardDelTaskBtn(delTaskBtn, card);
 }
 
+// edit to hide individual elms???
 export function todoCardShowHideDetailsBtnFunc(btn, card) {
     if (btn.classList.contains("down-arrow")) {
         //edit btn to up arrow
@@ -420,17 +417,19 @@ export function todoCardShowHideDetailsBtnFunc(btn, card) {
     }
 }
 
-export function todoCardDelBtnChangeOnSelect(btn, card){
+export function todoCardDelBtnChangeOnSelect(btn, card) {
     const delTaskConfirmLine = swapOutElm( //hides button and "replaces" with confirm delete line
         btn, //elm to hide/unhide
         () => delConfirmMessageElm("delete task?"), //makes first elm in new line
-        () => confirmDelTaskFunc(card) //confirm del logic
+        () => confirmDelTaskFunc(card), //confirm del logic
+        true
     );
     addClassToElm(delTaskConfirmLine, "del-task-confirm-line"); //additional class
 }
 
 function confirmDelTaskFunc(card) {
     taskModule.delTask(card.id);
+    eventListenerModule.updateDocumentELneedsRemoveTrue(); //handles line reset if user clicks confirm but has error
     renderAll();
 }
 
@@ -464,6 +463,7 @@ function confirmAddProjFunc(wrapper, newInputLine) {
         projectModule.addProjectToProjectList(newProjInputVal);
         
         resetHiddenElm(wrapper, newInputLine);
+        eventListenerModule.updateDocumentELneedsRemoveTrue(); //handles line reset if user clicks confirm but has error
         renderAll();
     }
 }
@@ -507,9 +507,12 @@ function swapOutIsForDelLine(newWrapper, hiddenElm) {
 
 function swapOutIsForEditLine(newWrapper) {
     addClassToElm(newWrapper, "edit-line");
-    const newWrapperInput = newWrapper.querySelector(":first-child");
-    if (newWrapperInput.tagName !== "SELECT") {
-        newWrapperInput.select(); 
+    const firstElm = newWrapper.querySelector(":first-child");
+    if (
+        firstElm.tagName !== "SELECT" &&
+        firstElm.className !== "del-confirm-message"
+     ) {
+        firstElm.select(); 
     }
 }
 
@@ -536,6 +539,9 @@ function createConfirmCancelLine(hiddenElm, firstElmFunc, confirmFunc) {
     appendElmToLocation(firstElm, confirmCancelLine, "append");
     appendElmToLocation(confirmBtn, confirmCancelLine, "append");
     appendElmToLocation(cancelBtn, confirmCancelLine, "append");
+
+    //add EL to confirmCancelLine that resets the edit line if user moves out of that process
+    eventListenerModule.resetLineHandler(confirmCancelLine, hiddenElm, cancelBtn, confirmBtn);
 
     return confirmCancelLine;    
 }

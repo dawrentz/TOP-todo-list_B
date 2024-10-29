@@ -86,4 +86,37 @@ export function addELtoSidebarAddProjBtn(btn) {
 
 //"add Project Confirm Btn Func" in renderModule.js under Sidebar Functions 
 
+//============================================ Derived Functions EventListeners ============================================//
+
+let _documentELneedsRemove = false; //for resetLineHandler 
+
+export function updateDocumentELneedsRemoveTrue() {
+    _documentELneedsRemove = true;
+}
+
+export function resetLineHandler(confirmCancelLine, hiddenElm, cancelBtn, confirmBtn) {
+
+    const resetLineListener = (event) => {
+        //if use clicks outside of edit line, reset line, remove reset listener, click the user selection (new event)
+        if(
+            !confirmCancelLine.contains(event.target) &&
+            !hiddenElm.contains(event.target)
+        ) {
+            document.removeEventListener("click", resetLineListener);
+            cancelBtn.click();
+            event.target.click();
+        } 
+        //if user selects the reset button, remove the listener
+        else if (
+            cancelBtn.contains(event.target) ||
+            _documentELneedsRemove
+        ) {
+            document.removeEventListener("click", resetLineListener);
+            _documentELneedsRemove = false;
+        }
+        //remove event listener on confirm click in the re-render handler (this is the best idea I got)
+    }
+
+    document.addEventListener("click", resetLineListener);
+}
 
