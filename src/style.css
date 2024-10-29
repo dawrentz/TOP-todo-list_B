@@ -67,6 +67,7 @@ body {
     }
 
     /* todo-card non-detailed display */
+    /* i wrapped these, may need to adjust or hide in js */
     .todo-card-abridged {
         .todo-data-line-project {
             display: none;

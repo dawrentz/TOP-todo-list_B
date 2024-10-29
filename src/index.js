@@ -28,22 +28,16 @@ renderModule.renderAll();
 
 
 //test
-// const bodyElm = document.querySelector("body");
 
-// function addELtoElm(elm, callback) {
-//     elm.addEventListener("click", callback);
-// }
+function figureOuter(event) {
+    console.log("target");
+    console.log(event.target);
+    console.log("target parent");
+    console.log(event.target.parentElement);
+    console.log("====================================");
+    
+}
 
-// function clickBodyFunc(event, text) {
-//     innerEventFunc(event);
-//     console.log(text);
-// }
-
-// function innerEventFunc(event) {
-//     console.log(event.target);
-
-// }
-
-// addELtoElm(bodyElm, (event) => clickBodyFunc(event, "textTest"));
+document.addEventListener("click", figureOuter);
 
 

@@ -197,6 +197,8 @@ function addELsToDefaultCard(card) {
 }
 
 export function defTodoCardShowHideDetailsBtnFunc(btn, card) {
+    // const formWrapper = card.querySelector("#default-card-form-wrapper");
+
     if (btn.classList.contains("add-sign")) {
         //edit btn to up arrow
         btn.textContent = "▲";
@@ -204,6 +206,7 @@ export function defTodoCardShowHideDetailsBtnFunc(btn, card) {
         addClassToElm(btn, "up-arrow");
         //edit card: remove abridged view
         card.classList.remove("def-todo-card-abridged");
+        // formWrapper.style = "display: block";
     }
     else if (btn.classList.contains("up-arrow")) {
         //edit btn to add sign (is like "down arrow")
@@ -212,6 +215,7 @@ export function defTodoCardShowHideDetailsBtnFunc(btn, card) {
         addClassToElm(btn, "add-sign");
         //edit card to abridged view
         addClassToElm(card, "def-todo-card-abridged");
+        // formWrapper.style = "display: none";
     }
 }
 

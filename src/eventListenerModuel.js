@@ -97,24 +97,26 @@ export function updateDocumentELneedsRemoveTrue() {
 export function resetLineHandler(confirmCancelLine, hiddenElm, cancelBtn, confirmBtn) {
 
     const resetLineListener = (event) => {
-        //if use clicks outside of edit line, reset line, remove reset listener, click the user selection (new event)
-        if(
-            !confirmCancelLine.contains(event.target) &&
-            !hiddenElm.contains(event.target)
-        ) {
-            document.removeEventListener("click", resetLineListener);
-            cancelBtn.click();
-            event.target.click();
-        } 
-        //if user selects the reset button, remove the listener
-        else if (
-            cancelBtn.contains(event.target) ||
-            _documentELneedsRemove
-        ) {
-            document.removeEventListener("click", resetLineListener);
-            _documentELneedsRemove = false;
+        if (event.target.className !== "cancel-btn") { //if user clicks on another edit line, the resetlistener is applied to that line, and then this old cancelClick (a click outside of new editLine) triggers the new EL and then clicks the new cancelBtn
+        
+            //if use clicks outside of edit line, then reset the line and remove reset listener
+            if(
+                !confirmCancelLine.contains(event.target) &&
+                !hiddenElm.contains(event.target)
+            ) {
+                document.removeEventListener("click", resetLineListener);
+                cancelBtn.click(); 
+            } 
+            //if user selects the reset button or had confirm logic fire, remove the listener
+            else if (
+                cancelBtn.contains(event.target) ||
+                _documentELneedsRemove
+            ) {
+                document.removeEventListener("click", resetLineListener);
+                _documentELneedsRemove = false;
+            }
+        
         }
-        //remove event listener on confirm click in the re-render handler (this is the best idea I got)
     }
 
     document.addEventListener("click", resetLineListener);
