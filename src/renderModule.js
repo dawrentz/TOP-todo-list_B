@@ -329,6 +329,16 @@ function addEditBtnsToTodoCardLines(todoCardArg, taskID) {
                 return newInput;
             }
         }
+        //for priority line
+        else if (propToChange === "priority") {
+            //create date input            
+            createInputCallbackFunc = () => {
+                const newInput = createBtn(dataLineOldVal, "todo-priority-input");
+                eventListenerModule.addELToDefaultCardPriorityBtn(newInput);
+                addValueToElm(newInput, dataLineOldVal)
+                return newInput;
+            }
+        }
 
         //create edit bnt with proper callback or input creation
         addEditBtnToTodoLine( 
@@ -381,6 +391,8 @@ function populateTodoCardInfo(task, card) {
     const todoProjectElm = card.querySelector(".todo-project");
     const todoDescriptElm = card.querySelector(".todo-description");
     const todoDueDateElm = card.querySelector(".todo-dueDate");
+    const todoPriorityElm = card.querySelector(".todo-priority");
+
     //priority is the card color
 
     //link elms to task prop to populate
@@ -388,6 +400,7 @@ function populateTodoCardInfo(task, card) {
     todoProjectElm.textContent = task.project;
     todoDescriptElm.textContent  = task.description === "" ? "description" : task.description; //nicer UI to see where the description line is, vs there being just an editBtn floating there after project name
     todoDueDateElm.textContent = task.dueDate;
+    todoPriorityElm.textContent = task.priority;
     //set priority class here?
 }
 
@@ -514,7 +527,8 @@ function swapOutIsForEditLine(newWrapper) {
     const firstElm = newWrapper.querySelector(":first-child");
     if (
         firstElm.tagName !== "SELECT" &&
-        firstElm.className !== "del-confirm-message"
+        firstElm.tagName !== "BUTTON" &&
+        firstElm.className !== "del-confirm-message" //exclusions. select throws error on non-selectable elms
      ) {
         firstElm.select(); 
     }
@@ -526,6 +540,14 @@ function grabUserInput(event) { //used in edit lines
     const thisConfirmCancelLine = thisConfirmBtn.parentElement;
     const thisUserInputElm = thisConfirmCancelLine.querySelector(":first-child"); //first child in 
     const rawUserInput = thisUserInputElm.value;
+    // let rawUserInput;
+    // //priortity selection used a clickable buttonto change priorities. .value throws error ofn
+    // if (thisUserInputElm.tagName === "BUTTON") {
+    //     rawUserInput = thisUserInputElm.value;
+    // }
+    // else {
+    //     rawUserInput = thisUserInputElm.value;
+    // }
     const newUserInput = helperModule.userInputFormatter(rawUserInput);
     
     return newUserInput;
@@ -606,7 +628,10 @@ function createBtn(textContentArg, classNameArg, callbackFunc) {
     addClassToElm(newBtn, classNameArg);
     newBtn.textContent = textContentArg;
     
-    newBtn.addEventListener("click", callbackFunc);
+    //needed btn without callback
+    if (callbackFunc) {
+        newBtn.addEventListener("click", callbackFunc);
+    }
     
     return newBtn;
 }
@@ -634,7 +659,7 @@ function addAttToElm(elm, attName, attValue) {
     elm.setAttribute(attName, attValue);
 }
 
-function addValueToElm(elm, value) {
+export function addValueToElm(elm, value) {
     elm.value = value;
 }
 

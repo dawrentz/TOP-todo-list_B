@@ -17,27 +17,11 @@ projectModule.addProjectToProjectList("project 3");
 projectModule.addProjectToProjectList("project 1");
 projectModule.addProjectToProjectList("project 2");
 
-const task1 = new taskModule.Task("task1", "project 1", "descripton1", "dueDateToday", "high priority");
+const task1 = new taskModule.Task("task1", "project 1", "descripton1", "2024-10-07", "high");
 taskModule.addTasktoTaskList(task1);
-const task2 = new taskModule.Task("task2", "project 2", "descripton2", "dueDateTomorrow", "low priority");
+const task2 = new taskModule.Task("task2", "project 2", "descripton2", "2024-10-08", "low");
 taskModule.addTasktoTaskList(task2);
-const task3 = new taskModule.Task("task3", "project 2", "descripton3", "dueDateYesterday", "med priority");
+const task3 = new taskModule.Task("task3", "project 2", "descripton3", "2024-10-09", "med");
 taskModule.addTasktoTaskList(task3);
 
 renderModule.renderAll();
-
-
-//test
-
-function figureOuter(event) {
-    console.log("target");
-    console.log(event.target);
-    console.log("target parent");
-    console.log(event.target.parentElement);
-    console.log("====================================");
-    
-}
-
-document.addEventListener("click", figureOuter);
-
-

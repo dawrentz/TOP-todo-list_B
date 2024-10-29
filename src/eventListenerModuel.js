@@ -37,12 +37,18 @@ export function addELToDefaultCardPriorityBtn(btn) {
         //priority btn click rotation. Don't feel this needs its own module
         if (btn.textContent === "high") {
             btn.textContent = "low";
+            btn.removeAttribute("value");
+            renderModule.addValueToElm(btn, "low");
         }
         else if (btn.textContent === "low") {
             btn.textContent = "med";
+            btn.removeAttribute("value");
+            renderModule.addValueToElm(btn, "med");
         }
         else if (btn.textContent === "med") {
             btn.textContent = "high";
+            btn.removeAttribute("value");
+            renderModule.addValueToElm(btn, "high");
         }
     });
 }
