@@ -12,7 +12,7 @@
     
     /* testing */
     * {
-        outline: solid red 1px;
+        /* outline: solid red 1px; */
 
     }
 }
@@ -65,6 +65,25 @@ body {
 
         max-height: max-content;
     }
+
+    .todo-card.high-priority {
+        background-color: firebrick;
+        color: var(--color-sec);
+    }
+
+    .todo-card.med-priority {
+        background-color: darkorange;
+        color: var(--color-sec);
+    }
+
+    .todo-card.low-priority {
+        background-color: gold;
+    }
+
+    .todo-card.done-priority {
+        background-color: chartreuse;
+    }
+        
 
     /* def-todo-card non-detailed display */
     .def-todo-card-abridged {

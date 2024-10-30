@@ -189,7 +189,7 @@ function addELsToDefaultCard(card) {
 
     //changeable priority btn
     const priorityBtn = card.querySelector("#todo-priority-input");
-    eventListenerModule.addELToDefaultCardPriorityBtn(priorityBtn);
+    eventListenerModule.addELToPriorityBtn(priorityBtn);
 
     //show/hide btn
     const showHideDetailsBtn = card.querySelector(".show-hide-details-btn");
@@ -257,20 +257,20 @@ function createToDoCard(task) {
     addELsToTodoCard(todoCard)
     //populate template
     populateTodoCardInfo(task, todoCard);
-    //init hidden elements
-    const elmsToHide = getElmToHideInAbridgedTodoCard(todoCard);
-    changeDisplayToElmList(elmsToHide, "none");
-
-
-
-
+    //init style
+    initStyleTodoCard(todoCard);
     //add edit btns
     addEditBtnsToTodoCardLines(todoCard, task.idNum);
 
-
-
-
     return todoCard;
+}
+
+function initStyleTodoCard(card) {
+    const elmsToHide = getElmToHideInAbridgedTodoCard(card);
+    changeDisplayToElmList(elmsToHide, "none");
+
+    const taskPriority = taskModule.findTaskProp(card.id, "priority") + "-priority";
+    addClassToElm(card, taskPriority);
 }
 
 function addEditBtnsToTodoCardLines(todoCardArg, taskID) {
@@ -279,9 +279,6 @@ function addEditBtnsToTodoCardLines(todoCardArg, taskID) {
 
     //loop through each line and add specific input types as needed
     allTodoDataLines.forEach((dataLine) => {
-        //set args in if/thens and call addEditBtnToTodoLine() once at end
-        
-        
         //grab class name and pull out the task prop being edited
         const specificClassName = dataLine.classList[1]; //task prop in in the second array item className. May be better to assign those lines specific data attribute in the HTML template and reference here
         const propToChange = helperModule.extractTaskPropFromTodoLineClass(specificClassName);
@@ -340,7 +337,7 @@ function addEditBtnsToTodoCardLines(todoCardArg, taskID) {
             //create date input            
             createInputCallbackFunc = () => {
                 const newInput = createBtn(dataLineOldVal, "todo-priority-input");
-                eventListenerModule.addELToDefaultCardPriorityBtn(newInput);
+                eventListenerModule.addELToPriorityBtn(newInput);
                 addValueToElm(newInput, dataLineOldVal)
                 return newInput;
             }
@@ -579,16 +576,8 @@ function grabUserInput(event) { //used in edit lines
     //use event to walk up to parent and down to user input
     const thisConfirmBtn = event.target;
     const thisConfirmCancelLine = thisConfirmBtn.parentElement;
-    const thisUserInputElm = thisConfirmCancelLine.querySelector(":first-child"); //first child in 
+    const thisUserInputElm = thisConfirmCancelLine.querySelector(":first-child"); //first child has value needed
     const rawUserInput = thisUserInputElm.value;
-    // let rawUserInput;
-    // //priortity selection used a clickable buttonto change priorities. .value throws error ofn
-    // if (thisUserInputElm.tagName === "BUTTON") {
-    //     rawUserInput = thisUserInputElm.value;
-    // }
-    // else {
-    //     rawUserInput = thisUserInputElm.value;
-    // }
     const newUserInput = helperModule.userInputFormatter(rawUserInput);
     
     return newUserInput;

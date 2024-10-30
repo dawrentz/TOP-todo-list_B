@@ -23,5 +23,7 @@ const task2 = new taskModule.Task("task2", "project 2", "descripton2", "2024-10-
 taskModule.addTasktoTaskList(task2);
 const task3 = new taskModule.Task("task3", "project 2", "descripton3", "2024-10-09", "med");
 taskModule.addTasktoTaskList(task3);
+const task4 = new taskModule.Task("task4", "project 3", "descripton4", "2024-10-10", "done");
+taskModule.addTasktoTaskList(task4);
 
 renderModule.renderAll();

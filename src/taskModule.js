@@ -7,7 +7,7 @@ const _taskList = [];
 let _idNum = 0;
 
 function getNewIDnum() {
-    const newID = _idNum++;
+    const newID = _idNum++; //local storage
     return newID.toString(); //need convert id to string for edit task funcs
 }
 

@@ -32,10 +32,10 @@ export function addELToDefaultCardSubmitBtn(btn, card) {
     });
 }
 
-export function addELToDefaultCardPriorityBtn(btn) {
+export function addELToPriorityBtn(btn) {
     btn.addEventListener("click", () => {
         //priority btn click rotation. Don't feel this needs its own module
-        if (btn.textContent === "high") {
+        if (btn.textContent === "done") {
             btn.textContent = "low";
             btn.removeAttribute("value");
             renderModule.addValueToElm(btn, "low");
@@ -49,6 +49,11 @@ export function addELToDefaultCardPriorityBtn(btn) {
             btn.textContent = "high";
             btn.removeAttribute("value");
             renderModule.addValueToElm(btn, "high");
+        }
+        else if (btn.textContent === "high") {
+            btn.textContent = "done";
+            btn.removeAttribute("value");
+            renderModule.addValueToElm(btn, "done");
         }
     });
 }
