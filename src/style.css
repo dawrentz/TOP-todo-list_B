@@ -66,18 +66,6 @@ body {
         max-height: max-content;
     }
 
-    /* todo-card non-detailed display */
-    /* i wrapped these, may need to adjust or hide in js */
-    .todo-card-abridged {
-        .todo-data-line-project {
-            display: none;
-        }
-        
-        .todo-data-line-description {
-            display: none;
-        }
-    }
-    
     /* def-todo-card non-detailed display */
     .def-todo-card-abridged {
         #default-card-form-wrapper {

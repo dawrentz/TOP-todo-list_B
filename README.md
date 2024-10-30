@@ -15,6 +15,9 @@ todo:
     -css
     -date formatting
     -date default
+    -change hide todo card to js not css (display is overwritten with the edit lines)
+    -wrapped todo lines
+    -could only reset line on edit, not re-render all (better UI)
 
 now:
     -edit todo lines

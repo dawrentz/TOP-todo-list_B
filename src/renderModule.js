@@ -257,6 +257,12 @@ function createToDoCard(task) {
     addELsToTodoCard(todoCard)
     //populate template
     populateTodoCardInfo(task, todoCard);
+    //init hidden elements
+    const elmsToHide = getElmToHideInAbridgedTodoCard(todoCard);
+    changeDisplayToElmList(elmsToHide, "none");
+
+
+
 
     //add edit btns
     addEditBtnsToTodoCardLines(todoCard, task.idNum);
@@ -416,6 +422,9 @@ function addELsToTodoCard(card) {
 
 // edit to hide individual elms???
 export function todoCardShowHideDetailsBtnFunc(btn, card) {
+    const elmsToHide = getElmToHideInAbridgedTodoCard(card);
+
+
     if (btn.classList.contains("down-arrow")) {
         //edit btn to up arrow
         btn.textContent = "▲";
@@ -423,6 +432,8 @@ export function todoCardShowHideDetailsBtnFunc(btn, card) {
         addClassToElm(btn, "up-arrow");
         //edit card: remove abridged view
         card.classList.remove("todo-card-abridged");
+        changeDisplayToElmList(elmsToHide, "initial");
+
     }
     else if (btn.classList.contains("up-arrow")) {
         //edit btn to down arrow
@@ -431,7 +442,37 @@ export function todoCardShowHideDetailsBtnFunc(btn, card) {
         addClassToElm(btn, "down-arrow");
         //edit card to abridged view
         addClassToElm(card, "todo-card-abridged");
+        changeDisplayToElmList(elmsToHide, "none");
     }
+}
+
+function changeDisplayToElmList(elmList, displaySetting) {
+    elmList.forEach((elm) => {
+        elm.style = `display: ${displaySetting}`;
+    });
+}
+
+function getElmToHideInAbridgedTodoCard(card) {
+    //list out elms to grab (for hiding)
+    const elmClassNamesToHide = [ 
+        "todo-data-line-project", 
+        "todo-data-line-description", 
+        "todo-data-line-priority"
+    ];
+
+    //gather elms to hide
+    const elmsToHide = [];
+
+    //find the elms in card
+    elmClassNamesToHide.forEach((className) => {
+        const classNameSelector = "." + className;
+        const dataElm = card.querySelector(classNameSelector);
+        const elmToHide = dataElm.parentElement;
+        //place in array
+        elmsToHide.push(elmToHide);
+    });
+
+    return elmsToHide;
 }
 
 export function todoCardDelBtnChangeOnSelect(btn, card) {
