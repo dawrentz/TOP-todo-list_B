@@ -11,7 +11,6 @@ personal notes:
 
 todo:
     -add localStorage module
-    -priority class color + complete, edit priority
     -css
     -date formatting
     -date default

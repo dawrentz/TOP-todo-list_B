@@ -1,5 +1,7 @@
 //helper.js
 
+import { format } from "date-fns";
+
 //sort array alphabetically
 export function sortArrayAtoZ(array) {
     return array.sort((a, b) => a.localeCompare(b));
@@ -17,5 +19,15 @@ export function extractTaskPropFromTodoLineClass(className) {
     const propToExtract = classNameArray[classNameArray.length - 1];
     
     return propToExtract; 
+}
 
+export function formatDateforTodoCard(dateInput) {
+    const fullDateAndSetTime = new Date(`${dateInput}T00:00:00`);
+    const formatteddateValue = format(fullDateAndSetTime, "MMM do, yyyy (eee)").toLowerCase();
+    return formatteddateValue;
+}
+
+export function dateSimplifier(dateValue) {
+    const dateValueFormatted = format(dateValue, "yyyy-MM-dd");
+    return dateValueFormatted;
 }

@@ -222,9 +222,11 @@ export function defTodoCardShowHideDetailsBtnFunc(btn, card) {
 function populateDefaultTodoCard(card) { //passing card because it's created in js, not from HTML
     const projectSelectLine = card.querySelector("#todo-project-input");
     addProjDropDownToDefaultCard(projectSelectLine);
-
-    //add default date
-
+    
+    //set default date to today
+    const dueDateSelectLine = card.querySelector("#todo-dueDate-input");
+    const today = new Date();
+    dueDateSelectLine.value = helperModule.dateSimplifier(today);
 }
 
 function addProjDropDownToDefaultCard(projectSelectLineArg) {
@@ -402,7 +404,8 @@ function populateTodoCardInfo(task, card) {
     todoTitleElm.textContent = task.title;
     todoProjectElm.textContent = task.project;
     todoDescriptElm.textContent  = task.description === "" ? "description" : task.description; //nicer UI to see where the description line is, vs there being just an editBtn floating there after project name
-    todoDueDateElm.textContent = task.dueDate;
+    todoDueDateElm.textContent = helperModule.formatDateforTodoCard(task.dueDate);
+    // todoDueDateElm.textContent = task.dueDate;
     todoPriorityElm.textContent = task.priority;
     //set priority class here?
 }

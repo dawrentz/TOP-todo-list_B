@@ -83,7 +83,7 @@ export function getUserInputsFromDefaultCard(card) {
     const titleInput = card.querySelector("#todo-title-input").value;
     const projectInput = card.querySelector("#todo-project-input").value;
     const descriptionInput = card.querySelector("#todo-description-input").value;
-    const dueDateInput = card.querySelector("#todo-dueDate-input").value;
+    const dueDateInput = card.querySelector("#todo-dueDate-input").value; 
     const priorityInput = card.querySelector("#todo-priority-input").textContent; //is btn
 
     const inputData = {
