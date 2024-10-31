@@ -10,10 +10,9 @@ personal notes:
     -SOLID (focus on single responsibility)
 
 todo:
-    -add localStorage module
     -css
-    -date formatting
-    -date default
     -I could only reset line on edit, not re-render all (better UI)
+    -show which project is selected on filter
 
 now:
+    -add localStorage module

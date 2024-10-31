@@ -1,6 +1,7 @@
 //taskModule.js
 
 import * as helperModule from "./helper.js";
+import * as localStorageModule from "./localStorageModule.js";
 
 const _taskList = [];
 
@@ -22,21 +23,14 @@ export class Task{
         this.idNum = getNewIDnum();
     }
 
-    //update localStorage
     getProp(prop) {
         return this[prop];
     }
 
-    //update localStorage
     setProp(prop, newVal) {
         this[prop] = newVal;
+        localStorageModule.updateLocalStorageAllInfo(); //update localStorage
     }
-}
-
-//update localStorage
-//make own module
-function updateLocalStorage(data) {
-    //logic
 }
 
 export function getTaskList() {
@@ -45,19 +39,19 @@ export function getTaskList() {
 } 
 
 //push new task. Needs to be in Task class and run automatically?
-//add local storage
 export function addTasktoTaskList(task) {
     _taskList.push(task);
+    localStorageModule.updateLocalStorageAllInfo(); //update localStorage
 }
 
 //delete a task
-//add local storage
 export function delTask(idNum) {
     _taskList.forEach((task, index) => {
         if (task.idNum === idNum) {
             _taskList.splice(index, 1);
         }
     });
+    localStorageModule.updateLocalStorageAllInfo(); //update localStorage
 } 
 
 //find all tasks IDs in a project
@@ -107,9 +101,9 @@ function formatTaskInfoFromDefaultCardInputs(inputDataArg) {
     return formattedInputData;
 }
 
-//updateLocal storage
 export function updateAllTasksThatMatch(prop, oldValue, newValue) {
     findAndUpdateTask(prop, oldValue, prop, newValue);
+    localStorageModule.updateLocalStorageAllInfo(); //update localStorage
 }
 
 export function findAndUpdateTask(propToFindBy, taskPropValtoFind, propToChange, changedPropNewVal) {
@@ -118,6 +112,7 @@ export function findAndUpdateTask(propToFindBy, taskPropValtoFind, propToChange,
             task.setProp(propToChange, changedPropNewVal); 
         }
     });
+    localStorageModule.updateLocalStorageAllInfo(); //update localStorage
 }
 
 export function findTaskProp(taskIDnum, propToFind) {
