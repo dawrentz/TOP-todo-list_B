@@ -10,9 +10,8 @@ personal notes:
     -SOLID (focus on single responsibility)
 
 todo:
-    -css
     -I could only reset line on edit, not re-render all (better UI)
     -show which project is selected on filter
 
 now:
-    -add localStorage module
+    -css

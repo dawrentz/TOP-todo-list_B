@@ -13,7 +13,6 @@
     /* testing */
     * {
         /* outline: solid red 1px; */
-
     }
 }
 
@@ -25,15 +24,21 @@ body {
 
     display: grid;
     /* set max width on first column? changes with project input */
-    grid-template-columns: 1fr 4fr; 
+    /* grid-template-columns: 25% minmax(min-content 75%);  */
+    grid-template-columns: minmax(max-content, 25%) minmax(max-content, 75%); 
     grid-template-rows: auto 1fr;
 
     /* set min-height so side bar can always fill up page vertically */
     min-height: 100vh;
+    min-width: max-content;
 }
 
 #header {
     grid-column: span 2;
+
+    #title-main {
+        justify-self: end;
+    }
 }
 
 #sidebar {
@@ -41,15 +46,82 @@ body {
     color: var(--color-main);
 
     margin-left: var(--padding);
+    margin-bottom: var(--padding);
 
+    /* min-width: min-content; */
+
+    .title-sec {
+        justify-self: center;
+        margin-bottom: var(--padding);
+    }
     
-    .sidebar-project-li {
-        /* set firm width */
-        width: fit-content;
+    #projects-list {
+        /* margin-left: calc(2 * var(--padding)); */
+        
+        .sidebar-project-li {
+            width: 100%;
+
+            margin-bottom: calc(0.5 * var(--spacing));
+            
+            .sidebar-proj-list-line {
+                display: grid;
+                grid-template-columns: auto 1fr min-content min-content;
+
+                .sidebar-proj-list-name {
+                    font-size: large;
+                }
+
+                .spacer {
+                    border-bottom: 1px solid var(--color-main);
+                    margin: 0 calc(0.5 * var(--spacing));
+                    margin-bottom: calc(0.75 * var(--spacing));
+
+                    /* alternate idea for the spacer line, not sure if these will break */
+                    /* could also make a 1px high box inside of spacer and justify/align to center*/
+                    /* outline: 1px solid var(--color-main);   */
+                    /* outline-offset: calc(-1 * var(--spacing));      */
+                }
+
+            }
+
+        }
     }
 
-}
+    /* project-edit-line */
+    #add-project-btn-wrappper + .confirm-cancel-line {
+        margin-left: var(--spacing);
+    }
+    
+    #add-project-btn-wrappper {
+        justify-self: center;
+        /* margin-top: var(--spacing); */
 
+        #add-project-btn {
+            background-color: var(--color-main);
+            
+            border: none;
+            --btn-size: calc(2 * var(--spacing));
+            
+            height: var(--btn-size);
+            width: var(--btn-size);
+            
+            border-radius: 50%;
+            
+            /* need shift btn txt */
+            div {
+                position: relative;
+                top: -8px;
+
+                font-size: xx-large;
+                color: var(--color-sec);
+            }
+
+        }
+
+
+    }
+}
+/* set first childs of todo data line to large font */
 #main-content {
     padding-top: calc(-1 * var(--padding));
 

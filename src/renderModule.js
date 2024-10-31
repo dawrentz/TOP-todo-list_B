@@ -70,6 +70,12 @@ function createSidebarProjListLine(projectName) {
 
     //add del/edit btns
     if (projectName !== "all") { //"all" doesn't get edit/del btns
+        //spacer
+        const spacerDiv = createElm("div");
+        addClassToElm(spacerDiv, "spacer");
+        appendElmToLocation(spacerDiv, lineWrapper, "append");
+
+
         //edit Btn
         const editBtn = createEditBtn( //create edit btn 
             () => swapOutElm( //swaps out project line for edit project line on edit btn select
@@ -669,8 +675,8 @@ function createBtn(textContentArg, classNameArg, callbackFunc) {
     return newBtn;
 }
 
-function resetHiddenElm(hiddenElm, newElmToDel) {
-    hiddenElm.style = "display: initial" //reset to inline-block?
+function resetHiddenElm(hiddenElm, newElmToDel, resetStyle) {
+    hiddenElm.style = `display: `; //found this by accident. Setting display to nothing remove js's override of css. Css can take over again.
     
     newElmToDel.remove();
 }
