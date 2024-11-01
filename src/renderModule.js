@@ -565,6 +565,7 @@ function swapOutIsForDelLine(newWrapper, hiddenElm) {
     const delLineValElm = createElm("div");
     addClassToElm(delLineValElm, "del-val-name");
     delLineValElm.textContent = elmToDelVal;
+    delLineValElm.style = "display: inline";
 
     appendElmToLocation(delLineValElm, newWrapper, "prepend");
 }
@@ -625,7 +626,7 @@ function createEditBtn(selectBtnFunc) {
 }
 
 function createDelBtn(selectBtnFunc) {
-    const newDelBtn = createBtn("⨉", "del-btn", selectBtnFunc);
+    const newDelBtn = createBtn("✖", "del-btn", selectBtnFunc);
     return newDelBtn;
 }
 
