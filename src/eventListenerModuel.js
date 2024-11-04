@@ -39,21 +39,30 @@ export function addELToPriorityBtn(btn) {
             btn.textContent = "low";
             btn.removeAttribute("value");
             renderModule.addValueToElm(btn, "low");
+            btn.classList.remove("done-priority");
+            btn.classList.add("low-priority");
         }
         else if (btn.textContent === "low") {
             btn.textContent = "med";
             btn.removeAttribute("value");
             renderModule.addValueToElm(btn, "med");
+            btn.classList.remove("low-priority");
+            btn.classList.add("med-priority");
         }
         else if (btn.textContent === "med") {
             btn.textContent = "high";
             btn.removeAttribute("value");
             renderModule.addValueToElm(btn, "high");
+            btn.classList.remove("med-priority");
+            btn.classList.add("high-priority");
         }
         else if (btn.textContent === "high") {
             btn.textContent = "done";
             btn.removeAttribute("value");
             renderModule.addValueToElm(btn, "done");
+            btn.classList.remove("high-priority");
+            btn.classList.add("done-priority");
+
         }
     });
 }

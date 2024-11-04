@@ -203,25 +203,23 @@ function addELsToDefaultCard(card) {
 }
 
 export function defTodoCardShowHideDetailsBtnFunc(btn, card) {
-    // const formWrapper = card.querySelector("#default-card-form-wrapper");
+    const innerBtnText = btn.querySelector("div");
 
     if (btn.classList.contains("add-sign")) {
         //edit btn to up arrow
-        btn.textContent = "▲";
+        innerBtnText.textContent = "▲";
         btn.classList.remove("add-sign");
         addClassToElm(btn, "up-arrow");
         //edit card: remove abridged view
         card.classList.remove("def-todo-card-abridged");
-        // formWrapper.style = "display: block";
     }
     else if (btn.classList.contains("up-arrow")) {
         //edit btn to add sign (is like "down arrow")
-        btn.textContent = "+";
+        innerBtnText.textContent = "+";
         btn.classList.remove("up-arrow");
         addClassToElm(btn, "add-sign");
         //edit card to abridged view
         addClassToElm(card, "def-todo-card-abridged");
-        // formWrapper.style = "display: none";
     }
 }
 
@@ -347,6 +345,7 @@ function addEditBtnsToTodoCardLines(todoCardArg, taskID) {
                 const newInput = createBtn(dataLineOldVal, "todo-priority-input");
                 eventListenerModule.addELToPriorityBtn(newInput);
                 addValueToElm(newInput, dataLineOldVal)
+                addClassToElm(newInput, dataLineOldVal + "-priority")
                 return newInput;
             }
         }
@@ -429,11 +428,11 @@ function addELsToTodoCard(card) {
 // edit to hide individual elms???
 export function todoCardShowHideDetailsBtnFunc(btn, card) {
     const elmsToHide = getElmToHideInAbridgedTodoCard(card);
-
+    const innerTextDiv = btn.querySelector("div");
 
     if (btn.classList.contains("down-arrow")) {
         //edit btn to up arrow
-        btn.textContent = "▲";
+        innerTextDiv.textContent = "▲";
         btn.classList.remove("down-arrow");
         addClassToElm(btn, "up-arrow");
         //edit card: remove abridged view
@@ -443,7 +442,7 @@ export function todoCardShowHideDetailsBtnFunc(btn, card) {
     }
     else if (btn.classList.contains("up-arrow")) {
         //edit btn to down arrow
-        btn.textContent = "▼";
+        innerTextDiv.textContent = "▼";
         btn.classList.remove("up-arrow");
         addClassToElm(btn, "down-arrow");
         //edit card to abridged view

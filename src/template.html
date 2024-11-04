@@ -37,7 +37,7 @@
     <!-- default todo card innerHTML template -->
     <template id="default-todo-card-template">
         <div id="default-card-form-wrapper">
-            add task
+            <div class="new-card-title">add task</div>
             <!-- title input -->
             <div class="todo-input-line">
                 <input
@@ -69,12 +69,14 @@
             </div>
             <!-- priority input -->
             <div class="todo-input-line">
-                <button type="button" id="todo-priority-input">high</button>
+                <button class="high-priority todo-priority-input" type="button" id="todo-priority-input">high</button>
             </div>
             <!-- submit -->
             <button type="button" id="submit-new-todo-button">submit</button>
         </div>
-        <button class="show-hide-details-btn add-sign down-arrow">+</button>
+        <button class="show-hide-details-btn add-sign">
+            <div>+</div>
+        </button>
     </template>
 
 
@@ -124,7 +126,9 @@
             </div>
         </div>
 
-        <button class="show-hide-details-btn down-arrow">▼</button>
+        <button class="show-hide-details-btn down-arrow">
+            <div>▼</div>
+        </button>
         <button class="del-task-btn del-btn">✖</button>
 
     </template>

@@ -9,6 +9,7 @@
     --spacing: 1rem;
     --padding: 1rem;
     --font-family-main: Arial, Helvetica, sans-serif;
+    --corners: calc(0.5 *var(--spacing));
     
     /* testing */
     * {
@@ -25,6 +26,7 @@ body {
     display: grid;
     /* set max width on first column? changes with project input */
     grid-template-columns: minmax(max-content, 25%) minmax(max-content, 75%); 
+    /* grid-template-columns: 21.7rem minmax(max-content, 75%);  */
     grid-template-rows: auto 1fr;
 
     /* set min-height so side bar can always fill up page vertically */
@@ -36,11 +38,20 @@ body {
     grid-column: span 2;
 
     #title-main {
-        justify-self: end;
+        justify-self: start;
+
+        /* margin: 0 calc(1 * var(--padding)); */
     }
 }
 
+
+#sidebar,
+.todo-card {
+    border-radius: var(--corners)
+}
+
 #sidebar {
+    
     background-color: var(--color-sec);
     color: var(--color-main);
 
@@ -65,12 +76,6 @@ body {
     }
 
     #projects-list {
-        /* margin-left: calc(2 * var(--padding)); */
-        /* font-size: large; */
-
-
-
-        
         .sidebar-project-li {
             width: 100%;
 
@@ -108,6 +113,10 @@ body {
         /* margin-top: var(--spacing); */
 
         #add-project-btn {
+            display: grid;
+            align-content: center;
+            justify-content: center;
+
             background-color: var(--color-main);
             
             border: none;
@@ -120,18 +129,16 @@ body {
             
             /* need shift btn txt */
             div {
-                position: relative;
-                top: -8px;
+                max-height: min-content;
+                max-width: min-content;
 
                 font-size: xx-large;
                 color: var(--color-sec);
             }
-
         }
-
-
     }
 }
+
 /* set first childs of todo data line to large font */
 #main-content {
     padding-top: calc(-1 * var(--padding));
@@ -139,6 +146,68 @@ body {
     display: grid;
     gap: var(--padding);
     align-content: start;
+
+    #default-todo-card {
+
+        #default-card-form-wrapper {
+            .new-card-title {
+                font-weight: bold;
+                font-size: larger;
+            margin-bottom: var(--spacing);                
+            }
+        
+            .todo-input-line {
+                margin-bottom: calc(0.5 * var(--spacing));
+            }
+        }
+
+        button#submit-new-todo-button {
+            padding: calc(0 * var(--padding)) calc(0.5 * var(--padding));
+            border-radius: var(--corners);
+
+            border: solid 1px var(--color-main);
+            color: var(--color-main);
+            background-color: var(--color-sec);
+            
+            &:hover {
+                border: solid 1px var(--color-sec);
+                color: var(--color-sec);
+                background-color: var(--color-main);
+            }
+
+        }
+
+        button.add-sign {
+            margin: 0 auto;
+
+            display: grid;
+            align-content: center;
+            justify-content: center;
+
+            background-color: var(--color-main);
+            
+            border: none;
+            --btn-size: calc(2 * var(--spacing));
+            
+            height: var(--btn-size);
+            width: var(--btn-size);
+            
+            border-radius: 50%;
+            
+            /* need shift btn txt */
+            div {
+                max-height: min-content;
+                max-width: min-content;
+
+                font-size: xx-large;
+                color: var(--color-sec);
+            }
+        }
+
+        button.up-arrow {
+            margin: 0 50%;
+        }
+    }
 
     .todo-card {
         background-color: var(--color-sec);
@@ -166,22 +235,24 @@ body {
     .todo-card.done-priority {
         background-color: lightgreen;
     }
-        
 
     /* def-todo-card non-detailed display */
     .def-todo-card-abridged {
         #default-card-form-wrapper {
             display: none;
         }
-
     }
 }
-
 
 /* ============================================ Catch All ============================================ */
 
 .confirm-cancel-line {
-    button {
+
+    input {
+        margin-right: calc(0.5 * var(--spacing));
+    }
+
+    button:not(.todo-priority-input) {
         margin-left:  calc(0.25 * var(--padding));
     }
 }
@@ -195,13 +266,119 @@ body {
 }
 
 input {
+    padding-left: calc(0.5 * var(--padding));
+    padding-right: calc(0.5 * var(--padding));
+
     border: none;
+    outline: 1px grey solid;
+
+    border-radius: var(--corners);
+
+    &:hover,
+    &:focus {
+        outline: solid 2px black;
+    }
+    
+}
+
+select {
+    padding: calc(0 * var(--padding)) calc(0.5 * var(--padding));
+    border-radius: var(--corners);
+    
+    &:hover,
+    &:focus {
+        outline: solid 1px black;
+    }
+}
+
+textarea {
+    padding-left: calc(0.5 * var(--padding));
+    padding-right: calc(0.5 * var(--padding));
+    margin-bottom: calc(-0.25 * var(--padding));
+    
+    border: none;
+    outline: 1px grey solid;
+    
+    border-radius: var(--corners);
+    
+    &:hover,
+    &:focus {
+        outline: solid 2px black;
+    }
 }
 
 /* buttons========================== */
+button {
+    border: none;
+}
+
 button:hover {
     transform: scale(1.1);
     /* border: black solid 1px; */
+}
+
+button.todo-priority-input {
+    padding: calc(0 * var(--padding)) calc(0.5 * var(--padding));
+    border-radius: var(--corners);
+}
+    
+button.todo-priority-input.high-priority {
+    
+    color: var(--color-sec);
+    background-color: red;
+    border: solid white 1px;
+
+}
+
+button.done-priority {
+    color: var(--color-main);
+    background-color: greenyellow;
+    border: solid var(--color-main) 1px;
+
+    &#todo-priority-input{
+        border-color: var(--color-sec);
+    }
+}
+
+button.low-priority {
+    color: var(--color-main);
+    background-color: yellow;
+    border: solid var(--color-main) 1px;
+    
+        &#todo-priority-input{
+            border-color: var(--color-sec);
+        }
+}
+
+button.med-priority {
+    color: var(--color-sec);
+    background-color: orange;
+    border: solid var(--color-sec) 1px;
+}
+
+.up-arrow {
+    display: grid;
+    align-content: center;
+    justify-content: center;
+
+    color: var(--color-sec);
+    background-color: var(--color-main);
+
+    --btn-size: calc(1.25 * var(--spacing));
+    height: var(--btn-size);
+    width: var(--btn-size);
+    
+    border: none;
+    border-radius: 50%;
+
+    /* need shift btn txt */
+    div {
+        max-height: min-content;
+        max-width: min-content;
+
+        font-size: small;
+        color: var(--color-sec);
+    }
 }
 
 .confirm-btn {
