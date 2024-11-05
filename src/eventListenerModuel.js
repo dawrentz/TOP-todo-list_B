@@ -2,6 +2,7 @@ import * as taskModule from "./taskModule.js";
 import * as renderModule from "./renderModule.js";
 import * as filterModule from "./filterModule.js";
 import * as errorTestModule from "./errorTestModule.js";
+import * as localStorageModule from "./localStorageModule.js";
 
 //============================================ Default Card EventListeners ============================================//
 
@@ -141,4 +142,19 @@ export function resetLineHandler(confirmCancelLine, hiddenElm, cancelBtn, confir
 
     document.addEventListener("click", resetLineListener);
 }
+
+//============================================ Header EventListeners ============================================//
+
+export function addELtoDemoBtn(demoBtn) {
+    demoBtn.addEventListener("click", () => {
+        const confimrBL = confirm("This will reset all data and populate the app with demo tasks. Are you sure?");
+
+        if (confimrBL) {
+            localStorageModule.runLocalStorageTest();
+            location.reload();
+        }
+    });
+}
+
+
 

@@ -25,7 +25,7 @@ body {
 
     display: grid;
     /* set max width on first column? changes with project input */
-    grid-template-columns: minmax(max-content, 25%) minmax(max-content, 75%); 
+    grid-template-columns: 24rem minmax(max-content, 1fr); 
     /* grid-template-columns: 21.7rem minmax(max-content, 75%);  */
     grid-template-rows: auto 1fr;
 
@@ -37,11 +37,31 @@ body {
 #header {
     grid-column: span 2;
 
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+
     #title-main {
         justify-self: start;
 
         /* margin: 0 calc(1 * var(--padding)); */
     }
+
+    #demo-btn {
+        padding: calc(0 * var(--padding)) calc(0.5 * var(--padding));
+        border-radius: var(--corners);
+        
+        border: solid 1px var(--color-sec);
+        color: var(--color-sec);
+        background-color: var(--color-main);
+        
+        &:hover {
+            border: solid 1px var(--color-main);
+            color: var(--color-main);
+            background-color: var(--color-sec);
+        }
+    }   
 }
 
 
@@ -57,8 +77,6 @@ body {
 
     margin-left: var(--padding);
     margin-bottom: var(--padding);
-
-    /* min-width: min-content; */
 
     .title-sec {
         justify-self: center;
@@ -204,18 +222,42 @@ body {
             }
         }
 
-        button.up-arrow {
-            margin: 0 50%;
+
+        .default-todo-show-hide-details-btn-wrapper {
+            width: 100%;
+            display: flex;
+            justify-content: center;
         }
     }
 
     .todo-card {
         background-color: var(--color-sec);
         color: var(--color-main);
+        
+        max-height: max-content;
 
         padding: var(--padding);
+        &:not(#default-todo-card) {
+            padding-bottom: calc(0.5 * var(--padding));
+        }
 
-        max-height: max-content;
+
+        .edit-btn {
+            margin-left: calc(0.5 * var(--spacing));
+
+            ::after {
+                content: "test";
+            }
+        }
+
+        .todo-card-btns-wrapper {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+
+            .todo-del-btn-wrapper {
+                margin-left: auto;
+            }
+        }
     }
 
     .todo-card.high-priority {
@@ -284,7 +326,7 @@ input {
 select {
     padding: calc(0 * var(--padding)) calc(0.5 * var(--padding));
     border-radius: var(--corners);
-    
+
     &:hover,
     &:focus {
         outline: solid 1px black;
@@ -356,30 +398,61 @@ button.med-priority {
     border: solid var(--color-sec) 1px;
 }
 
-.up-arrow {
-    display: grid;
+
+.show-hide-details-btn {
+    /* display: grid;
     align-content: center;
-    justify-content: center;
+    justify-content: center; */
 
-    color: var(--color-sec);
-    background-color: var(--color-main);
-
-    --btn-size: calc(1.25 * var(--spacing));
-    height: var(--btn-size);
-    width: var(--btn-size);
+    /* background-color: var(--color-sec); */
+    background-color: transparent;
     
-    border: none;
-    border-radius: 50%;
+    /* --btn-size: calc(1.25 * var(--spacing));
+    height: var(--btn-size);
+    width: var(--btn-size); */
 
+    
+    /* border: 1px solid   var(--color-main); */
+    /* border-radius: 50%; */
+    
     /* need shift btn txt */
-    div {
+    
+    &:not(.add-sign) div {
         max-height: min-content;
         max-width: min-content;
-
-        font-size: small;
-        color: var(--color-sec);
+        
     }
+    
+    &.up-arrow div{
+        color: var(--color-main);
+        border-bottom: 1px solid var(--color-main);        
+    }
+    
+    &.down-arrow div{
+        color: var(--color-main);
+        border-top: 1px solid var(--color-main);        
+    }
+
+
 }
+
+/* up arrow on todo card with high/med priority */
+.todo-card.high-priority .show-hide-details-btn.up-arrow div,
+.todo-card.med-priority .show-hide-details-btn.up-arrow div {
+    border: none;
+    color: var(--color-sec);
+    border-bottom: 1px solid var(--color-sec);
+}
+
+/* down arrow on todo card with high/med priority */
+.todo-card.high-priority .show-hide-details-btn.down-arrow div,
+.todo-card.med-priority .show-hide-details-btn.down-arrow div {
+    border: none;
+    color: var(--color-sec);
+    border-top: 1px solid var(--color-sec);
+}
+
+
 
 .confirm-btn {
     background-color: var(--color-main);

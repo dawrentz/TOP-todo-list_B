@@ -7,6 +7,7 @@ import * as localStorageModule from "./localStorageModule.js";
 
 //declarations
 const addProjectBtn = document.querySelector("#add-project-btn");
+const demoBtn = document.querySelector("#demo-btn");
 
 //============================================ init ============================================//
 
@@ -17,6 +18,7 @@ const addProjectBtn = document.querySelector("#add-project-btn");
 
 //add EL to HTML btn
 eventListenerModule.addELtoSidebarAddProjBtn(addProjectBtn);
+eventListenerModule.addELtoDemoBtn(demoBtn);
 
 //load localStorage data
 localStorageModule.loadLocalStorageToApp();

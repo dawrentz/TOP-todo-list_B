@@ -403,16 +403,12 @@ function populateTodoCardInfo(task, card) {
     const todoDueDateElm = card.querySelector(".todo-dueDate");
     const todoPriorityElm = card.querySelector(".todo-priority");
 
-    //priority is the card color
-
     //link elms to task prop to populate
     todoTitleElm.textContent = task.title;
     todoProjectElm.textContent = task.project;
     todoDescriptElm.textContent  = task.description === "" ? "description" : task.description; //nicer UI to see where the description line is, vs there being just an editBtn floating there after project name
     todoDueDateElm.textContent = helperModule.formatDateforTodoCard(task.dueDate);
-    // todoDueDateElm.textContent = task.dueDate;
     todoPriorityElm.textContent = task.priority;
-    //set priority class here?
 }
 
 function addELsToTodoCard(card) {

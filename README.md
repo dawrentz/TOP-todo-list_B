@@ -15,4 +15,4 @@ todo:
 
 now:
     -css
-need make text div in up/down arrows
+    -make demo button

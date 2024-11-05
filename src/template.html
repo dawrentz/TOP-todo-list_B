@@ -10,8 +10,9 @@
         <div id="title-main">
             <h1>todoloo2</h1>
         </div>
-        
+        <button id="demo-btn">demo</button>        
     </div>
+
     <div id="sidebar">
         <div id="projects-list-container" class="sidebar-section">
             <div class="title-sec">
@@ -28,6 +29,7 @@
             </div>
         </div>
     </div>
+    
     <div id="main-content">
         <!-- populated by js -->
     </div>
@@ -74,9 +76,10 @@
             <!-- submit -->
             <button type="button" id="submit-new-todo-button">submit</button>
         </div>
-        <button class="show-hide-details-btn add-sign">
-            <div>+</div>
-        </button>
+        <div class=".wrapper btn-wrapper default-todo-show-hide-details-btn-wrapper">
+            <button class="show-hide-details-btn add-sign">
+                <div>+</div>
+        </div></button>
     </template>
 
 
@@ -87,7 +90,7 @@
             <!-- title line -->
             <div class="todo-data-line-wrapper">
                 <div class="todo-data-line todo-data-line-title">
-                    <div class="todo-title">
+                    <div class="todo-title data-task-prop-value">
                         <!-- populated by js -->
                     </div>
                 </div>
@@ -95,7 +98,7 @@
             <!-- project line -->
             <div class="todo-data-line-wrapper">
                 <div class="todo-data-line todo-data-line-project">
-                    <div class="todo-project">
+                    <div class="todo-project data-task-prop-value">
                         <!-- populated by js -->
                     </div>
                 </div>
@@ -103,7 +106,7 @@
             <!-- description line -->
             <div class="todo-data-line-wrapper">
                 <div class="todo-data-line todo-data-line-description">
-                    <div class="todo-description">
+                    <div class="todo-description data-task-prop-value">
                         <!-- populated by js -->
                     </div>
                 </div>
@@ -111,7 +114,7 @@
             <!-- dueDate line -->
             <div class="todo-data-line-wrapper">
                 <div class="todo-data-line todo-data-line-dueDate">
-                    <div class="todo-dueDate">
+                    <div class="todo-dueDate data-task-prop-value">
                         <!-- populated by js -->
                     </div>
                 </div>
@@ -119,17 +122,22 @@
             <!-- priority line -->
             <div class="todo-data-line-wrapper">
                 <div class="todo-data-line todo-data-line-priority">
-                    <div class="todo-priority">
+                    <div class="todo-priority data-task-prop-value">
                         <!-- populated by js -->
                     </div>
                 </div>
             </div>
         </div>
 
-        <button class="show-hide-details-btn down-arrow">
-            <div>▼</div>
-        </button>
-        <button class="del-task-btn del-btn">✖</button>
+        <div class="todo-card-btns-wrapper">
+            <div class="spacer"></div>
+            <button class="show-hide-details-btn down-arrow">
+                <div>▼</div>
+            </button>
+            <div class="todo-del-btn-wrapper">
+                <button class="del-task-btn del-btn">✖</button>
+            </div>
+        </div>
 
     </template>
 </body> 
