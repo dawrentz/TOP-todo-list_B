@@ -124,10 +124,10 @@ function sidebarEditProjConfirmFunc(event, projectName) {
 }
 
 function createSidebarProjListName(projectName) {
-    const projNameElm = createElm("div");
+    const projNameElm = createElm("span");
     addClassToElm(projNameElm, "sidebar-proj-list-name");
     projNameElm.textContent = projectName;
-    projNameElm.style = "display: inline"; //to make stay on same line. Move to css?
+    // projNameElm.style = "display: inline"; //to make stay on same line. Move to css?
     //add event listener
     eventListenerModule.addELtoSidebarProjName(projNameElm);
     return projNameElm;
@@ -370,8 +370,9 @@ function addEditBtnToTodoLine(dataLine, inputTypeCallback, taskID, propToChangeA
             true //is an edit line
         ) 
     ); 
+    todoLineEditBtn.style = "display: inline";
     
-    appendElmToLocation(todoLineEditBtn, dataLine, "append");
+    appendElmToLocation(todoLineEditBtn, dataLine, "prepend");
 }
 
 function todoDataLineEditBtnConfirmFunc(event, taskID, propToChangeArg) {
@@ -560,7 +561,7 @@ function swapOutIsForDelLine(newWrapper, hiddenElm) {
     const delLineValElm = createElm("div");
     addClassToElm(delLineValElm, "del-val-name");
     delLineValElm.textContent = elmToDelVal;
-    delLineValElm.style = "display: inline";
+    // delLineValElm.style = "display: inline";
 
     appendElmToLocation(delLineValElm, newWrapper, "prepend");
 }
@@ -572,7 +573,7 @@ function swapOutIsForEditLine(newWrapper) {
         firstElm.tagName !== "SELECT" &&
         firstElm.tagName !== "BUTTON" &&
         firstElm.className !== "del-confirm-message" //exclusions. select throws error on non-selectable elms
-     ) {
+    ) {
         firstElm.select(); 
     }
 }

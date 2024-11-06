@@ -25,13 +25,14 @@ body {
 
     display: grid;
     /* set max width on first column? changes with project input */
-    grid-template-columns: 24rem minmax(max-content, 1fr); 
+    grid-template-columns: 24rem 1fr; 
     /* grid-template-columns: 21.7rem minmax(max-content, 75%);  */
     grid-template-rows: auto 1fr;
 
     /* set min-height so side bar can always fill up page vertically */
     min-height: 100vh;
-    min-width: max-content;
+    /* set max-height so task cards can't overflow */
+    max-width: 100vw;
 }
 
 #header {
@@ -63,7 +64,6 @@ body {
         }
     }   
 }
-
 
 #sidebar,
 .todo-card {
@@ -103,18 +103,24 @@ body {
                 display: grid;
                 grid-template-columns: auto 1fr min-content min-content;
 
+                align-items: center;
+
                 gap: calc(0.25 * var(--padding));
+
+                .sidebar-proj-list-name {
+                    display: -webkit-box; /* Use flexible box model to allow clamping */
+                    -webkit-box-orient: vertical; /* Set the orientation to vertical */
+                    overflow: hidden; /* Hide the overflowed content */
+                    -webkit-line-clamp: 1; /* Limit to 3 lines of text */
+                    text-overflow: ellipsis; /* Add ellipsis when content overflows */
+
+                }
 
 
                 .spacer {
-                    border-bottom: 1px solid var(--color-main);
-                    /* margin: 0 calc(0.5 * var(--spacing)); */
-                    margin-bottom: calc(0.9 * var(--spacing));
-
-                    /* alternate idea for the spacer line, not sure if these will break */
-                    /* outline: 1px solid var(--color-main);   */
-                    /* outline-offset: calc(-1 * var(--spacing));      */
-                    /* could also make a 1px high box inside of spacer and justify/align to center*/
+                    height: 0.5px;
+                    /* border-bottom: 1px solid var(--color-main); */
+                    background-color: var(--color-main);
                 }
 
             }
@@ -167,11 +173,22 @@ body {
 
     #default-todo-card {
 
+        
         #default-card-form-wrapper {
             .new-card-title {
                 font-weight: bold;
                 font-size: larger;
-            margin-bottom: var(--spacing);                
+                /* margin-bottom: var(--spacing);                 */
+            }
+
+            #required-elm-note {
+                font-style: italic;
+                font-size: smaller;
+                margin-bottom: calc(0.5 * var(--spacing));
+            }
+                    
+            .required-elm {
+                color: red;
             }
         
             .todo-input-line {
@@ -241,12 +258,21 @@ body {
             padding-bottom: calc(0.5 * var(--padding));
         }
 
+        .data-task-prop-value {
+            display: inline;
+        }
 
-        .edit-btn {
-            margin-left: calc(0.5 * var(--spacing));
+        .todo-data-line {
+            display: flex;
+            align-items: center;
 
-            ::after {
-                content: "test";
+            .todo-title {
+                font-size: x-large;
+                font-weight: bold;
+            }
+            
+            .edit-btn {
+                margin-right: calc(0.5 * var(--spacing));
             }
         }
 
@@ -289,6 +315,7 @@ body {
 /* ============================================ Catch All ============================================ */
 
 .confirm-cancel-line {
+    max-height: 10px;
 
     input {
         margin-right: calc(0.5 * var(--spacing));
@@ -326,6 +353,9 @@ input {
 select {
     padding: calc(0 * var(--padding)) calc(0.5 * var(--padding));
     border-radius: var(--corners);
+
+    max-width: 7rem;
+
 
     &:hover,
     &:focus {
@@ -513,10 +543,4 @@ button.med-priority {
     
     border: none;
     border-radius: 50%;
-}
-
-/* elms that need to stay on same line (usually from swapOutLine() */
-.todo-data-line > *:first-child /* first elm of todo-data-line (to add edit btn) */
-{
-    display: inline;
 }

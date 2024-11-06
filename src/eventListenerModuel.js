@@ -147,7 +147,7 @@ export function resetLineHandler(confirmCancelLine, hiddenElm, cancelBtn, confir
 
 export function addELtoDemoBtn(demoBtn) {
     demoBtn.addEventListener("click", () => {
-        const confimrBL = confirm("This will reset all data and populate the app with demo tasks. Are you sure?");
+        const confimrBL = confirm("This will reset all data and populate the app with demo tasks. \n\nAre you sure?");
 
         if (confimrBL) {
             localStorageModule.runLocalStorageTest();

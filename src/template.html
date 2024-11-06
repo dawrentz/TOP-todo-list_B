@@ -40,6 +40,7 @@
     <template id="default-todo-card-template">
         <div id="default-card-form-wrapper">
             <div class="new-card-title">add task</div>
+            <div id="required-elm-note">*required</div>
             <!-- title input -->
             <div class="todo-input-line">
                 <input
@@ -47,12 +48,14 @@
                 name="todo-title-input"
                 id="todo-title-input"
                 placeholder="title">
+                <span class="required-elm">*</span>
             </div>
             <!-- project input -->
             <div class="todo-input-line">
                 <select id="todo-project-input">
                     <option value="">select project</option>
                 </select>
+                <span class="required-elm">*</span>
             </div>
             <!-- description input -->
             <div class="todo-input-line">
@@ -68,10 +71,12 @@
                 name="todo-dueDate-input"
                 id="todo-dueDate-input"
                 >
+                <span class="required-elm">*</span>
             </div>
             <!-- priority input -->
             <div class="todo-input-line">
                 <button class="high-priority todo-priority-input" type="button" id="todo-priority-input">high</button>
+                <span class="required-elm">*</span>
             </div>
             <!-- submit -->
             <button type="button" id="submit-new-todo-button">submit</button>
@@ -81,7 +86,6 @@
                 <div>+</div>
         </div></button>
     </template>
-
 
     <!-- todo card innerHTML template -->
     <template id="todo-card-template">
