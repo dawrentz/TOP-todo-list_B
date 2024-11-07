@@ -13,6 +13,8 @@ todo:
     -I could only reset line on edit, not re-render all (better UI)
     -show which project is selected on filter
     -move filter on proj edit (if on that proj)
+    -spacing todo data lines
+    -editline confirm buttons consistence margin left in todo cards
 
 now:
     -bug: click editProjSideBar, click cancel, click editProjSideBar, click input, makes the hidden line show

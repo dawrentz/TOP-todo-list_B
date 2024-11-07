@@ -127,11 +127,20 @@ function createSidebarProjListName(projectName) {
     const projNameElm = createElm("span");
     addClassToElm(projNameElm, "sidebar-proj-list-name");
     projNameElm.textContent = projectName;
-    // projNameElm.style = "display: inline"; //to make stay on same line. Move to css?
     //add event listener
     eventListenerModule.addELtoSidebarProjName(projNameElm);
+
+    //to style the current selected project filter
+    if (projectName === filterModule.getFilter()) {
+        addClassToElm(projNameElm, "current-filter");
+    }
+
     return projNameElm;
 }
+
+
+
+
 
 function createDropDownProjElms(includeDefaultOption) {
     //get sorted projects list

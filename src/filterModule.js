@@ -9,6 +9,10 @@ export function setFilter(filter) {
     _currentFilter = filter;
 }
 
+export function getFilter() {
+    return _currentFilter;
+}
+
 export function getFilteredTaskList() {
     let filteredTaskList = [];
     const completeTaskList = taskModule.getTaskList();
