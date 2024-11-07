@@ -115,28 +115,43 @@ export function updateDocumentELneedsRemoveTrue() {
     _documentELneedsRemove = true;
 }
 
+//this handles when to reset the edit line and when to remove the document EL for reseting the edit line (have to remove EL in same scope where created: JS limitation)
 export function resetLineHandler(confirmCancelLine, hiddenElm, cancelBtn, confirmBtn) {
 
     const resetLineListener = (event) => {
-        if (event.target.className !== "cancel-btn") { //if user clicks on another edit line, the resetlistener is applied to that line, and then this old cancelClick (a click outside of new editLine) triggers the new EL and then clicks the new cancelBtn
+        /*
+        The things to consider here are "is the event a cancelBtn click (any)?" and "is the event inside or outside the edit line?" 
         
-            //if use clicks outside of edit line, then reset the line and remove reset listener
-            if(
-                !confirmCancelLine.contains(event.target) &&
-                !hiddenElm.contains(event.target)
-            ) {
-                document.removeEventListener("click", resetLineListener);
-                cancelBtn.click(); 
-            } 
-            //if user selects the reset button or had confirm logic fire, remove the listener
-            else if (
-                cancelBtn.contains(event.target) ||
-                _documentELneedsRemove
-            ) {
-                document.removeEventListener("click", resetLineListener);
-                _documentELneedsRemove = false;
-            }
+        The complication is that this EL (now the previous) can be present when another editLine (and EL) is initiated (the previous EL can click 
+        the previous cancelBtn which triggers the new EL to click the new cancelBtn).
         
+        But also need to allow for the current confirm/cancel btns to be clicked
+        
+        And also allow for bad confirm clicks to not remove EL, hence the _documentELneedsRemove variable (user can click the confirm btn with bad input 
+        not causing the confirm logic to fire. Meaning the EL is still needed). This is where the updateDocumentELneedsRemoveTrue() comes in. The 
+        confirmLogic calls the function and sets _documentELneedsRemove to true. The EL here checks for _documentELneedsRemove to be true. If so, it
+        removes itself and resets _documentELneedsRemove to false.  
+        */
+
+        //first case is no cancelBtns and not inside current edit selection
+        if (
+            event.target.className !== "cancel-btn" && 
+            !confirmCancelLine.contains(event.target) && //if user clicks outside of edit line, then remove reset listener reset the line
+            !hiddenElm.contains(event.target) //need this because the new event on the editBtn immediately registers outside of editLine, and the EL clicks cancelBtn
+        ) { 
+            document.removeEventListener("click", resetLineListener);
+            cancelBtn.click(); //runs cancel logic, but counts as an event (could pass the cancel logic to here as a callback?)
+        }
+
+        //case for the original cancel button being clicked        
+        else if (cancelBtn.contains(event.target) ) {
+            document.removeEventListener("click", resetLineListener);
+        }
+
+        //case for the original confirm button having a good click        
+        else if (confirmBtn.contains(event.target) && _documentELneedsRemove) {
+            document.removeEventListener("click", resetLineListener);
+            _documentELneedsRemove = false; 
         }
     }
 

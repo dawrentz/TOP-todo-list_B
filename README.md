@@ -12,8 +12,8 @@ personal notes:
 todo:
     -I could only reset line on edit, not re-render all (better UI)
     -show which project is selected on filter
-    -bug: click editProjSideBar, click cancel, click editProjSideBar, click input, makes the hidden line show
-        happends other places with cancel button, something to do with a used click inside the confirm/cancel line
     -move filter on proj edit (if on that proj)
 
 now:
+    -bug: click editProjSideBar, click cancel, click editProjSideBar, click input, makes the hidden line show
+        happends other places with cancel button, something to do with a used click inside the confirm/cancel line
