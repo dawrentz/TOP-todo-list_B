@@ -27,6 +27,6 @@ localStorageModule.loadLocalStorageToApp();
 renderModule.renderAll();
 
 //test
-document.addEventListener("click", () => {
-    console.log(event.target);
-});
+// document.addEventListener("click", () => {
+    // console.log(event.target);
+// });
