@@ -12,7 +12,12 @@ export function checkHasErrorUserDefCardInputs(userInputObj) {
         if (prop !== "description") { //exclusions for checkForHasBlankInput, others are required
 
             if (checkForHasBlankInput(userInputObj[prop])) {
-                hasError = true;
+                let propError = prop;
+                if (prop === "dueDate") {
+                    propError = "due date";
+                } 
+
+                hasError = `${propError} may not be blank`;
             }
         }
     });
@@ -24,29 +29,29 @@ export function checkHasErrorUserDefCardInputs(userInputObj) {
 
 export function checkHasErrorUserAddProjInputs(userInput) {
     //init checker
-    let hasError = false;
+    let errorResult = false;
     //check for blank input
     if (checkForHasBlankInput(userInput)) {
-        hasError = true;
+        errorResult = "no blank inputs allowed";
     }
     //check for duplicate project
     const currentProjectList = projectModule.getProjectList();
 
     if (checkForHasDuplicateInList(userInput, currentProjectList)) {
-        hasError = true;
+        errorResult = "no repeat projects allowed";
     }
 
-    return hasError;
+    return errorResult;
 }
 
 export function checkHasErrorUserInputEditProject(userInput) {
-    let hasError = false;
+    let errorResult = false;
     //check for blank input
     if (checkForHasBlankInput(userInput)) {
-        hasError = true;
+        errorResult = "no blank inputs allowed";
     }
 
-    return hasError;
+    return errorResult;
 }
 
 //============================================ Generic Checks ============================================//

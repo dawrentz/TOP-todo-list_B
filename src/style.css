@@ -346,6 +346,7 @@ body {
 
 /* ============================================ Catch All ============================================ */
 
+
 .confirm-cancel-line {
     max-height: 10px;
 
@@ -356,6 +357,18 @@ body {
     button:not(.todo-priority-input) {
         margin-left:  calc(0.25 * var(--padding));
     }
+
+}
+
+.error-message {
+    font-style: italic;
+    font-size: small;
+    color: red;
+}
+
+/* special case error message, this could be needed for all edit lines */
+#add-project-btn-wrappper + .confirm-cancel-line .error-message {
+    margin-left: var(--spacing);
 }
 
 .del-confirm-message {

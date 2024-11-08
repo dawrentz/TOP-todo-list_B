@@ -6,6 +6,7 @@ import * as localStorageModule from "./localStorageModule.js";
 
 //============================================ Default Card EventListeners ============================================//
 
+{} //spacer
 //creates new task and re-renders all
 export function addELToDefaultCardSubmitBtn(btn, card) {
     btn.addEventListener("click", () => {
@@ -13,11 +14,10 @@ export function addELToDefaultCardSubmitBtn(btn, card) {
         const userInputsObj = taskModule.getUserInputsFromDefaultCard(card);
 
         //check inputs
-        if (errorTestModule.checkHasErrorUserDefCardInputs(userInputsObj)) {
-            //put this in errorMod function
-            console.warn("ERROR: user add task input error")
-        }
-        else { 
+        const errorResult =errorTestModule.checkHasErrorUserDefCardInputs(userInputsObj);
+
+
+        if (!errorResult) { 
             //create and add new task
             const newTask = new taskModule.Task(
                 userInputsObj.title,
@@ -29,7 +29,15 @@ export function addELToDefaultCardSubmitBtn(btn, card) {
             taskModule.addTasktoTaskList(newTask);
             //re-render all to reflect change
             renderModule.renderAll();
+        }        
+        else {
+            const submitBtnWrapper = btn.parentElement;
+
+            renderModule.checkReplaceAndCreateErrorMessage(submitBtnWrapper, errorResult);
+
         }
+
+
     });
 }
 

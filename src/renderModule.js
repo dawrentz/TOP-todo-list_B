@@ -81,7 +81,7 @@ function createSidebarProjListLine(projectName) {
             () => swapOutElm( //swaps out project line for edit project line on edit btn select
                 lineWrapper,
                 () => createNewInput("value", projectName), //creates new input line for user
-                (event) => sidebarEditProjConfirmFunc(event, projectName), //edit project logic
+                (event) => sidebarEditProjConfirmFunc(event, projectName, lineWrapper), //edit project logic
                 true //is an edit line
             ) 
         ); 
@@ -109,17 +109,20 @@ function sidebarDelProjConfirmFunc(projectName) {
 }
 
 //could abstract this for todo edits
-function sidebarEditProjConfirmFunc(event, projectName) {
+function sidebarEditProjConfirmFunc(event, projectName, editLine) {
     const newUserInput = grabUserInput(event);
+    const confirmCancelLine = editLine.parentElement.querySelector(".confirm-cancel-line");
+
+    const errorTestResult = errorTestModule.checkHasErrorUserInputEditProject(newUserInput);
 
     //if no error, edit project
-    if (!errorTestModule.checkHasErrorUserInputEditProject(newUserInput)) {
+    if (!errorTestResult) {
         projectModule.updateEntireProjectProjtName(projectName, newUserInput);
         eventListenerModule.updateDocumentELneedsRemoveTrue(); //handles line reset if user clicks confirm but has error
         renderAll();
     }
     else {
-        console.warn("ERROR: user input error");
+        checkReplaceAndCreateErrorMessage(confirmCancelLine, errorTestResult)
     }
 }
 
@@ -137,10 +140,6 @@ function createSidebarProjListName(projectName) {
 
     return projNameElm;
 }
-
-
-
-
 
 function createDropDownProjElms(includeDefaultOption) {
     //get sorted projects list
@@ -386,23 +385,25 @@ function addEditBtnToTodoLine(dataLine, inputTypeCallback, taskID, propToChangeA
 
 function todoDataLineEditBtnConfirmFunc(event, taskID, propToChangeArg) {
     const newUserInput = grabUserInput(event);
-    let readyToRender = true;
+    const confirmCancelLine = event.target.parentElement;
+    const errorResult = errorTestModule.checkHasErrorUserInputEditProject(newUserInput);
     
     //run input check
     if (propToChangeArg !== "description") { //exclusions
-        readyToRender = !errorTestModule.checkHasErrorUserInputEditProject(newUserInput); //hasError returns true if error, so use ! for opposite
+        if (!errorResult) {
+            taskModule.findAndUpdateTask("idNum", taskID, propToChangeArg, newUserInput);
+            eventListenerModule.updateDocumentELneedsRemoveTrue(); //handles line reset if user clicks confirm but has error
+            renderAll();//maybe not renderAll? just update that line? (better UI)
+        }
+        else {
+            checkReplaceAndCreateErrorMessage(confirmCancelLine, errorResult);
+        }
     }
-    
-    //run if all is ready
-    if (readyToRender) {
+    if (propToChangeArg === "description") { //for the exclusions
         taskModule.findAndUpdateTask("idNum", taskID, propToChangeArg, newUserInput);
         eventListenerModule.updateDocumentELneedsRemoveTrue(); //handles line reset if user clicks confirm but has error
         renderAll();//maybe not renderAll? just update that line? (better UI)
     }
-    else {
-        console.warn("ERROR: user input error");
-    }
-    
 }
 
 function populateTodoCardInfo(task, card) {
@@ -520,24 +521,45 @@ function confirmAddProjFunc(wrapper, newInputLine) {
     //collect and format user input
     const rawProjInputVal = newInputLine.querySelector("input").value;
     const newProjInputVal = helperModule.userInputFormatter(rawProjInputVal);
-    
+
+    const confirmCancelLine = wrapper.parentElement.querySelector(".confirm-cancel-line");
+    const errorTestResult = errorTestModule.checkHasErrorUserAddProjInputs(newProjInputVal);
+
     //check user input
-    if (errorTestModule.checkHasErrorUserAddProjInputs(newProjInputVal)) {
-        
-        //make error function
-        
-        console.warn("ERROR: user project input error");
-    }
-    else {
+    if (!errorTestResult) {
         projectModule.addProjectToProjectList(newProjInputVal);
         
         resetHiddenElm(wrapper, newInputLine);
         eventListenerModule.updateDocumentELneedsRemoveTrue(); //handles line reset if user clicks confirm but has error
         renderAll();
+        
+    }
+    else {
+        checkReplaceAndCreateErrorMessage(confirmCancelLine, errorTestResult)
     }
 }
 
 //============================================ Derived Functions ============================================//
+
+//this feels more connected to the render module that the error testing module
+export function checkReplaceAndCreateErrorMessage(locationToCheckAndAdd, errorMessage) {
+    const possibleExistingErrorMessage = locationToCheckAndAdd.querySelector(".error-message");
+
+    if (possibleExistingErrorMessage !== null) {
+        possibleExistingErrorMessage.remove();
+    }
+
+    const errorMessageElm = createErrorMessageElm(errorMessage);
+    appendElmToLocation(errorMessageElm, locationToCheckAndAdd, "append");
+}
+
+function createErrorMessageElm(errorMessage) {
+    const errorElm = createElm("div");
+    addClassToElm(errorElm, "error-message");
+    errorElm.textContent = errorMessage;
+
+    return errorElm;
+}
 
 function swapOutElm(elmToHide, firstElmFunc, confirmFunc, isForEditLine, isForDelLine) {
     hideElm(elmToHide);
