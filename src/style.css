@@ -65,7 +65,7 @@ body {
 
 #sidebar,
 .todo-card {
-    border-radius: var(--corners)
+    border-radius: var(--corners);
 }
 
 #sidebar {
@@ -270,8 +270,8 @@ body {
         }
         
         .todo-data-line-wrapper {
-            max-width: 100%;
-            /* margin-bottom: calc(2 * var(--spacing)); */
+            margin-bottom: calc(0.25 * var(--spacing));
+            max-width: 100%; 
             
             * {
                 overflow: hidden;
@@ -350,7 +350,10 @@ body {
 .confirm-cancel-line {
     max-height: 10px;
 
-    input {
+    input,
+    select,
+    textarea,
+    .todo-priority-input {
         margin-right: calc(0.5 * var(--spacing));
     }
 
@@ -507,6 +510,7 @@ button.med-priority {
     &.down-arrow div{
         color: var(--color-main);
         border-top: 1px solid var(--color-main);        
+        margin-bottom: calc(-0.5 * var(--spacing));
     }
 
 
@@ -589,4 +593,8 @@ button.med-priority {
     
     border: none;
     border-radius: 50%;
+}
+
+.todo-card .del-btn {
+    margin-right: calc(-0.5 * var(--spacing));
 }

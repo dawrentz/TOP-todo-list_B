@@ -444,7 +444,7 @@ export function todoCardShowHideDetailsBtnFunc(btn, card) {
         addClassToElm(btn, "up-arrow");
         //edit card: remove abridged view
         card.classList.remove("todo-card-abridged");
-        changeDisplayToElmList(elmsToHide, "initial");
+        changeDisplayToElmList(elmsToHide, "");
 
     }
     else if (btn.classList.contains("up-arrow")) {
