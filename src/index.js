@@ -9,14 +9,16 @@ import * as localStorageModule from "./localStorageModule.js";
 const addProjectBtn = document.querySelector("#add-project-btn");
 const demoBtn = document.querySelector("#demo-btn");
 
-//============================================ init ============================================//
+//============================================ test ============================================//
 
 //optional for testing
 // localStorage.clear();
 // console.table(localStorage);
-// localStorageModule.runLocalStorageTest();
+// eventListenerModule.seeAllClickEventTargets();
 
-//add EL to HTML btn
+//============================================ init ============================================//
+
+//add EL to HTML btns
 eventListenerModule.addELtoSidebarAddProjBtn(addProjectBtn);
 eventListenerModule.addELtoDemoBtn(demoBtn);
 
@@ -25,8 +27,3 @@ localStorageModule.loadLocalStorageToApp();
 
 //run
 renderModule.renderAll();
-
-//test
-// document.addEventListener("click", () => {
-    // console.log(event.target);
-// });

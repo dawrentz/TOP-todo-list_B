@@ -117,6 +117,12 @@ function sidebarEditProjConfirmFunc(event, projectName, editLine) {
 
     //if no error, edit project
     if (!errorTestResult) {
+        //if user is editing the current filter, change filter to edited project (else get no tasks to render)
+        const currentFilter = filterModule.getFilter();
+        if (projectName === currentFilter) {
+            filterModule.setFilter(newUserInput);
+        }
+
         projectModule.updateEntireProjectProjtName(projectName, newUserInput);
         eventListenerModule.updateDocumentELneedsRemoveTrue(); //handles line reset if user clicks confirm but has error
         renderAll();
@@ -169,9 +175,7 @@ function createDropDownProjElms(includeDefaultOption) {
 
         projectElms.unshift(projectElmDef);
     }
-
-
-    
+   
     return projectElms;    
 }
 
@@ -201,7 +205,7 @@ function addELsToDefaultCard(card) {
     const submitButton = card.querySelector("#submit-new-todo-button");
     eventListenerModule.addELToDefaultCardSubmitBtn(submitButton, card);
 
-    //changeable priority btn
+    //changeable priority btn input
     const priorityBtn = card.querySelector("#todo-priority-input");
     eventListenerModule.addELToPriorityBtn(priorityBtn);
 
@@ -210,6 +214,7 @@ function addELsToDefaultCard(card) {
     eventListenerModule.addELtoDefaultShowHideDetailsBtn(showHideDetailsBtn, card);
 }
 
+//starting out, i was trying to be modular and only add ELs in the EL mod, but it became silly as all logic of the EL callback needed to be in renderMod. 
 export function defTodoCardShowHideDetailsBtnFunc(btn, card) {
     const innerBtnText = btn.querySelector("div");
 
@@ -242,7 +247,6 @@ function populateDefaultTodoCard(card) { //passing card because it's created in 
 }
 
 function addProjDropDownToDefaultCard(projectSelectLineArg) {
-    //createProjectElms func uses the entire project list (need to remove "all")
     const dropDownProjElms = createDropDownProjElms();
     //append
     renderProjectListToLocation(dropDownProjElms, projectSelectLineArg);
@@ -262,7 +266,7 @@ function renderTodoCards() {
 function createToDoCard(task) {
     //create card and append template
     const todoCard = createCard("div", "todo-card", task.idNum); //task.id will need string
-    //add in abridged class
+    //init as abridged
     addClassToElm(todoCard, "todo-card-abridged");
     const templateClone = cloneTemplate("#todo-card-template");
     appendElmToLocation(templateClone, todoCard, "append");
@@ -335,6 +339,8 @@ function addEditBtnsToTodoCardLines(todoCardArg, taskID) {
                 const newInput = createElm("textarea");
                 addClassToElm(newInput, "edit-todo-description-input");
                 addValueToElm(newInput, dataLineOldVal);
+                addAttToElm(newInput, "rows", "4");
+                addAttToElm(newInput, "cols", "50");
                 return newInput;
             }         
         }
@@ -369,7 +375,6 @@ function addEditBtnsToTodoCardLines(todoCardArg, taskID) {
 }
 
 function addEditBtnToTodoLine(dataLine, inputTypeCallback, taskID, propToChangeArg) {
-    //title editBtn and func
     const todoLineEditBtn = createEditBtn( //create edit btn 
         () => swapOutElm( //swaps out project line for edit project line on edit btn select
             dataLine, //line to hide
@@ -389,7 +394,7 @@ function todoDataLineEditBtnConfirmFunc(event, taskID, propToChangeArg) {
     const errorResult = errorTestModule.checkHasErrorUserInputEditProject(newUserInput);
     
     //run input check
-    if (propToChangeArg !== "description") { //exclusions
+    if (propToChangeArg !== "description") { //error check exclusions
         if (!errorResult) {
             taskModule.findAndUpdateTask("idNum", taskID, propToChangeArg, newUserInput);
             eventListenerModule.updateDocumentELneedsRemoveTrue(); //handles line reset if user clicks confirm but has error
@@ -399,7 +404,7 @@ function todoDataLineEditBtnConfirmFunc(event, taskID, propToChangeArg) {
             checkReplaceAndCreateErrorMessage(confirmCancelLine, errorResult);
         }
     }
-    if (propToChangeArg === "description") { //for the exclusions
+    if (propToChangeArg === "description") { //handle exclusions confirm click
         taskModule.findAndUpdateTask("idNum", taskID, propToChangeArg, newUserInput);
         eventListenerModule.updateDocumentELneedsRemoveTrue(); //handles line reset if user clicks confirm but has error
         renderAll();//maybe not renderAll? just update that line? (better UI)
@@ -432,7 +437,6 @@ function addELsToTodoCard(card) {
     eventListenerModule.addELtoTodoCardDelTaskBtn(delTaskBtn, card);
 }
 
-// edit to hide individual elms???
 export function todoCardShowHideDetailsBtnFunc(btn, card) {
     const elmsToHide = getElmToHideInAbridgedTodoCard(card);
     const innerTextDiv = btn.querySelector("div");
@@ -464,9 +468,10 @@ function changeDisplayToElmList(elmList, displaySetting) {
     });
 }
 
+//made as own function to modify as needed
 function getElmToHideInAbridgedTodoCard(card) {
     //list out elms to grab (for hiding)
-    const elmClassNamesToHide = [ 
+    const elmClassNamesToHideList = [ 
         "todo-data-line-project", 
         "todo-data-line-description", 
         "todo-data-line-priority"
@@ -476,7 +481,7 @@ function getElmToHideInAbridgedTodoCard(card) {
     const elmsToHide = [];
 
     //find the elms in card
-    elmClassNamesToHide.forEach((className) => {
+    elmClassNamesToHideList.forEach((className) => {
         const classNameSelector = "." + className;
         const dataElm = card.querySelector(classNameSelector);
         const elmToHide = dataElm.parentElement;
@@ -492,7 +497,7 @@ export function todoCardDelBtnChangeOnSelect(btn, card) {
         btn, //elm to hide/unhide
         () => delConfirmMessageElm("delete task?"), //makes first elm in new line
         () => confirmDelTaskFunc(card), //confirm del logic
-        true
+        true //technically is a del line, not edit line. But isForDelLine is more for the strikethrough styling in the projDel mechanic (has additional first element in the confirmCancelLine)
     );
     addClassToElm(delTaskConfirmLine, "del-task-confirm-line"); //additional class
 }
@@ -587,12 +592,11 @@ function swapOutElm(elmToHide, firstElmFunc, confirmFunc, isForEditLine, isForDe
 }
 
 function swapOutIsForDelLine(newWrapper, hiddenElm) {
-    const elmToDelVal = hiddenElm.querySelector("* > *").textContent; //grab textContent of the original line's first child (has the data value needed)
+    const elmToDelVal = hiddenElm.querySelector("* > *").textContent; //grab textContent of the original line's first child (has the data value needed) <- prob should just use a data attribute in the elm
 
     const delLineValElm = createElm("div");
     addClassToElm(delLineValElm, "del-val-name");
     delLineValElm.textContent = elmToDelVal;
-    // delLineValElm.style = "display: inline";
 
     appendElmToLocation(delLineValElm, newWrapper, "prepend");
 }
@@ -601,9 +605,9 @@ function swapOutIsForEditLine(newWrapper) {
     addClassToElm(newWrapper, "edit-line");
     const firstElm = newWrapper.querySelector(":first-child");
     if (
-        firstElm.tagName !== "SELECT" &&
+        firstElm.tagName !== "SELECT" && //exclusions. select throws error on non-selectable elms
         firstElm.tagName !== "BUTTON" &&
-        firstElm.className !== "del-confirm-message" //exclusions. select throws error on non-selectable elms
+        firstElm.className !== "del-confirm-message" 
     ) {
         firstElm.select(); 
     }
@@ -625,7 +629,7 @@ function createConfirmCancelLine(hiddenElm, firstElmFunc, confirmFunc) {
     addClassToElm(confirmCancelLine, "confirm-cancel-line");
 
     const firstElm = firstElmFunc();
-    firstElm.style = "display: inline"; //to make stay on same line. Move to css?
+    firstElm.style = "display: inline"; //to make stay on same line. Move to css? <- here seems okay. it's a temporary line
     const confirmBtn = createConfirmBtn(confirmFunc);
     const cancelBtn = createCancelBtn(hiddenElm, confirmCancelLine);
 
@@ -695,7 +699,7 @@ function createBtn(textContentArg, classNameArg, callbackFunc) {
     addClassToElm(newBtn, classNameArg);
     newBtn.textContent = textContentArg;
     
-    //needed btn without callback
+    //needed btn with callback
     if (callbackFunc) {
         newBtn.addEventListener("click", callbackFunc);
     }

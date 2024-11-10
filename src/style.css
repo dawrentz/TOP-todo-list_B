@@ -11,7 +11,7 @@
     --font-family-main: Arial, Helvetica, sans-serif;
     --corners: calc(0.5 *var(--spacing));
     
-    /* testing */
+    /* debugging */
     * {
         /* outline: solid red 1px; */
     }
@@ -29,9 +29,9 @@ body {
 
     /* set min-height so side bar can always fill up page vertically */
     min-height: 100vh;
-    /* set max-height so task cards can't overflow */
-    /* max-width: 100vw; */
 }
+
+/* ============================================ Header ============================================ */
 
 #header {
     grid-column: span 2;
@@ -40,11 +40,8 @@ body {
     justify-content: space-between;
     align-items: center;
 
-
     #title-main {
         justify-self: start;
-
-        /* margin: 0 calc(1 * var(--padding)); */
     }
 
     #demo-btn {
@@ -67,6 +64,8 @@ body {
 .todo-card {
     border-radius: var(--corners);
 }
+
+/* ============================================ Sidebar ============================================ */
 
 #sidebar {
     background-color: var(--color-sec);
@@ -112,7 +111,6 @@ body {
                     text-overflow: ellipsis; /* Add ellipsis when content overflows */
 
                     &:not(.current-filter):hover {
-                        /* text-decoration: underline; */
                         transform: scale(1.1);
                         cursor: pointer;
                     }
@@ -120,17 +118,12 @@ body {
                     &.current-filter {
                         font-weight: bold;
                     }
-
-
                 }
-
 
                 .spacer {
                     height: 0.5px;
-                    /* border-bottom: 1px solid var(--color-main); */
                     background-color: var(--color-main);
                 }
-
             }
         }
     }
@@ -171,6 +164,8 @@ body {
     }
 }
 
+/* ============================================ Main Content ============================================ */
+
 /* set first childs of todo data line to large font */
 #main-content {
     padding-top: calc(-1 * var(--padding));
@@ -185,7 +180,6 @@ body {
             .new-card-title {
                 font-weight: bold;
                 font-size: larger;
-                /* margin-bottom: var(--spacing);                 */
             }
 
             #required-elm-note {
@@ -216,7 +210,6 @@ body {
                 color: var(--color-sec);
                 background-color: var(--color-main);
             }
-
         }
 
         button.add-sign {
@@ -246,7 +239,6 @@ body {
             }
         }
 
-
         .default-todo-show-hide-details-btn-wrapper {
             width: 100%;
             display: flex;
@@ -265,10 +257,6 @@ body {
             padding-bottom: calc(0.5 * var(--padding));
         }
         
-        .data-task-prop-value {
-            /* display: inline; */
-        }
-        
         .todo-data-line-wrapper {
             margin-bottom: calc(0.25 * var(--spacing));
             max-width: 100%; 
@@ -278,19 +266,15 @@ body {
                 text-overflow: ellipsis; /* Add ellipsis when content overflows */
             }
 
-            
             .todo-data-line {
                 display: grid;
                 grid-template-columns: auto auto;
                 justify-content: start;
-                /* align-items: center; */
-                
                 
                 .edit-btn {
                     align-self: start;
                     margin-top: calc(0.2 * var(--spacing));
                     margin-right: calc(0.5 * var(--spacing));
-                    
                 }
                 
                 &.todo-data-line-title {
@@ -303,8 +287,6 @@ body {
                         margin-top: calc(0.55 * var(--spacing));
                     }
                 }
-                
-                
             }
         }
             
@@ -346,7 +328,6 @@ body {
 
 /* ============================================ Catch All ============================================ */
 
-
 .confirm-cancel-line {
     max-height: 10px;
 
@@ -360,7 +341,6 @@ body {
     button:not(.todo-priority-input) {
         margin-left:  calc(0.25 * var(--padding));
     }
-
 }
 
 .error-message {
@@ -368,6 +348,12 @@ body {
     font-size: small;
     color: red;
 }
+
+.todo-card.high-priority .error-message,
+.todo-card.med-priority .error-message {
+    color: yellow;
+}
+
 
 /* special case error message, this could be needed for all edit lines */
 #add-project-btn-wrappper + .confirm-cancel-line .error-message {
@@ -395,7 +381,6 @@ input {
     &:focus {
         outline: solid 2px black;
     }
-    
 }
 
 select {
@@ -403,7 +388,6 @@ select {
     border-radius: var(--corners);
 
     max-width: 7rem;
-
 
     &:hover,
     &:focus {
@@ -427,7 +411,7 @@ textarea {
     }
 }
 
-/* buttons========================== */
+/* ===buttons=== */
 button {
     border: none;
     
@@ -444,11 +428,9 @@ button.todo-priority-input {
 }
     
 button.todo-priority-input.high-priority {
-    
     color: var(--color-sec);
     background-color: red;
     border: solid white 1px;
-
 }
 
 button.done-priority {
@@ -466,9 +448,9 @@ button.low-priority {
     background-color: yellow;
     border: solid var(--color-main) 1px;
     
-        &#todo-priority-input{
-            border-color: var(--color-sec);
-        }
+    &#todo-priority-input{
+        border-color: var(--color-sec);
+    }
 }
 
 button.med-priority {
@@ -477,29 +459,12 @@ button.med-priority {
     border: solid var(--color-sec) 1px;
 }
 
-
 .show-hide-details-btn {
-    /* display: grid;
-    align-content: center;
-    justify-content: center; */
-
-    /* background-color: var(--color-sec); */
     background-color: transparent;
-    
-    /* --btn-size: calc(1.25 * var(--spacing));
-    height: var(--btn-size);
-    width: var(--btn-size); */
-
-    
-    /* border: 1px solid   var(--color-main); */
-    /* border-radius: 50%; */
-    
-    /* need shift btn txt */
     
     &:not(.add-sign) div {
         max-height: min-content;
         max-width: min-content;
-        
     }
     
     &.up-arrow div{
@@ -512,8 +477,6 @@ button.med-priority {
         border-top: 1px solid var(--color-main);        
         margin-bottom: calc(-0.5 * var(--spacing));
     }
-
-
 }
 
 /* up arrow on todo card with high/med priority */
@@ -531,8 +494,6 @@ button.med-priority {
     color: var(--color-sec);
     border-top: 1px solid var(--color-sec);
 }
-
-
 
 .confirm-btn {
     background-color: var(--color-main);
@@ -554,7 +515,7 @@ button.med-priority {
     color: var(--color-sec);
     
     font-size: smaller;
-    /* font-weight: bolder; */
+    font-weight: bolder;
     
     --btn-size: calc(1.25 * var(--spacing));
     height: var(--btn-size);

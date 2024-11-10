@@ -8,7 +8,7 @@ const _taskList = [];
 let _idNum = 0;
 
 function getNewIDnum() {
-    const newID = _idNum++; //local storage
+    const newID = _idNum++; //doesn't need to be in local storage. Tasks are recreated on reboot. This servers more as just a way to search through tasks from user events 
     return newID.toString(); //need convert id to string for edit task funcs
 }
 
@@ -20,7 +20,7 @@ export class Task{
         this.description = description;
         this.dueDate = dueDate;
         this.priority = priority;
-        this.idNum = getNewIDnum();
+        this.idNum = getNewIDnum(); //hide id
     }
 
     getProp(prop) {

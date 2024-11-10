@@ -9,13 +9,10 @@ personal notes:
     -create all in console first (ensure no DOM dependancy)
     -SOLID (focus on single responsibility)
 
-todo:
-    -I could only reset line on edit, not re-render all (better UI)
-    -show which project is selected on filter
-    -move filter on proj edit (if on that proj)
-    -spacing todo data lines
-    -editline confirm buttons consistence margin left in todo cards
+completed: 
+Did it. I think it was a good call to restart. Feels like I really internalied the single responsibility principle. 
 
-now:
-    -bug: click editProjSideBar, click cancel, click editProjSideBar, click input, makes the hidden line show
-        happends other places with cancel button, something to do with a used click inside the confirm/cancel line
+Things I'd of done different:
+    -No lean so heavy on renderAll(). There are a few places where only rendering part of the DOM seems like better UI (feels like I can move on though)
+    -Split up renderModule.js (it's easy enough to navigate, but it got pretty big)
+    -Used the data attribute in elmenets for js manipulation (vs classes and id's)

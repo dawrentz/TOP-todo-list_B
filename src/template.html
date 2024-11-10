@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>todoloo2</title>
-    </head>
+</head>
 <body>
     <div id="header">
         <div id="title-main">
@@ -20,10 +20,11 @@
             </div>
             <div id="projects-list-wrapper">
                 <ul id="projects-list">
+                    <!-- filled by js -->
                 </ul>
                 <div class="wrapper" id="add-project-btn-wrappper">
                     <button type="button" id="add-project-btn">
-                        <div>+</div>
+                        <div>+</div> <!-- wrap text content for centering -->
                     </button>
                 </div>
             </div>
@@ -48,7 +49,7 @@
                 name="todo-title-input"
                 id="todo-title-input"
                 placeholder="title">
-                <span class="required-elm">*</span>
+                <span class="required-elm">*</span> <!-- setting required here wasn't working as expected -->
             </div>
             <!-- project input -->
             <div class="todo-input-line">
@@ -101,6 +102,7 @@
                     </div>
                 </div>
             </div>
+
             <!-- project line -->
             <div class="todo-data-line-wrapper">
                 <div class="todo-data-line todo-data-line-project">
@@ -109,6 +111,7 @@
                     </div>
                 </div>
             </div>
+
             <!-- description line -->
             <div class="todo-data-line-wrapper">
                 <div class="todo-data-line todo-data-line-description">
@@ -117,6 +120,7 @@
                     </div>
                 </div>
             </div>
+
             <!-- dueDate line -->
             <div class="todo-data-line-wrapper">
                 <div class="todo-data-line todo-data-line-dueDate">
@@ -125,6 +129,7 @@
                     </div>
                 </div>
             </div>
+
             <!-- priority line -->
             <div class="todo-data-line-wrapper">
                 <div class="todo-data-line todo-data-line-priority">
@@ -144,7 +149,7 @@
                 <button class="del-task-btn del-btn">✖</button>
             </div>
         </div>
-
     </template>
+
 </body> 
 </html>

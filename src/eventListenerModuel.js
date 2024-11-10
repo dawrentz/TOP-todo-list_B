@@ -1,3 +1,5 @@
+//eventListenerModule.js
+
 import * as taskModule from "./taskModule.js";
 import * as renderModule from "./renderModule.js";
 import * as filterModule from "./filterModule.js";
@@ -15,7 +17,6 @@ export function addELToDefaultCardSubmitBtn(btn, card) {
 
         //check inputs
         const errorResult =errorTestModule.checkHasErrorUserDefCardInputs(userInputsObj);
-
 
         if (!errorResult) { 
             //create and add new task
@@ -36,8 +37,6 @@ export function addELToDefaultCardSubmitBtn(btn, card) {
             renderModule.checkReplaceAndCreateErrorMessage(submitBtnWrapper, errorResult);
 
         }
-
-
     });
 }
 
@@ -71,7 +70,6 @@ export function addELToPriorityBtn(btn) {
             renderModule.addValueToElm(btn, "done");
             btn.classList.remove("high-priority");
             btn.classList.add("done-priority");
-
         }
     });
 }
@@ -171,7 +169,7 @@ export function resetLineHandler(confirmCancelLine, hiddenElm, cancelBtn, confir
 export function addELtoDemoBtn(demoBtn) {
     demoBtn.addEventListener("click", () => {
         const confimrBL = confirm("This will reset all data and populate the app with demo tasks. \n\nAre you sure?");
-
+        
         if (confimrBL) {
             localStorageModule.runLocalStorageTest();
             location.reload();
@@ -179,5 +177,11 @@ export function addELtoDemoBtn(demoBtn) {
     });
 }
 
+//============================================ Testing EventListeners ============================================//
 
+export function seeAllClickEventTargets() {
+    document.addEventListener("click", (event) => {
+        console.log(event.target);
+    });
+}
 
